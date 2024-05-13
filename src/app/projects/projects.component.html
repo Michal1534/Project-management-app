@@ -1,0 +1,16 @@
+<div class="h-full flex flex-column gap-5 justify-content-center align-items-center">
+    <ng-container *ngIf="(projects$ | async)?.length; else noProjects">
+        <div *ngFor="let project of projects$ | async">
+            <p-button
+                [routerLink]="project.project.id.toString()"
+                [raised]="true"
+                size="large"
+                label="{{ project.project.name }}"
+            >
+            </p-button>
+        </div>
+    </ng-container>
+    <ng-template #noProjects>
+        <div class="text-3xl">Nie należysz do żadnego projektu</div>
+    </ng-template>
+</div>

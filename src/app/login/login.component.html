@@ -1,0 +1,35 @@
+<div class="h-full flex align-items-center justify-content-center">
+  <div style="border-radius:50px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
+    <div class="surface-card py-8 px-5" style="border-radius:53px">
+      <form [formGroup]="loginForm">
+        <div class="mb-6">
+          <span class="p-float-label">
+            <input class="p-3 w-25rem"
+                   type="text"
+                   formControlName="email"
+                   pInputText>
+            <label>E-mail</label>
+          </span>
+        </div>
+
+        <div class="mb-6">
+          <span class="p-float-label">
+            <p-password formControlName="password"
+                        inputStyleClass="p-3 w-25rem"
+                        [feedback]="false">
+            </p-password>
+            <label>Hasło</label>
+          </span>
+        </div>
+
+        <button (click)="onLogInClick()"
+                class="w-25rem p-3 flex justify-content-center"
+                pButton
+                pRipple
+                label="Zaloguj">
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+<p-toast></p-toast>

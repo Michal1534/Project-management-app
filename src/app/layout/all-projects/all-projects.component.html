@@ -1,0 +1,55 @@
+<div [style.height]="'calc(100vh - ' + 10 + 'rem)'">
+    <p-table
+        *ngIf="projects$ | async as projects"
+        #table
+        [scrollable]="true"
+        [value]="projects"
+        [selectionPageOnly]="true"
+        [rowHover]="true"
+        [rows]="20"
+        scrollHeight="flex"
+        [paginator]="true"
+        class="table-custom"
+    >
+        <ng-template pTemplate="caption">
+            <div class="w-full flex align-items-center justify-content-between">
+                <div class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input
+                        pInputText
+                        type="text"
+                        (input)="table.filter($any($event.target).value, 'name', 'contains')"
+                        placeholder="Wyszukaj projekt"
+                    />
+                </div>
+                <div class="w-full flex align-items-center justify-content-end">
+                    <button pButton label="Dodaj nowy projekt" icon="pi pi-plus" iconPos="right"></button>
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header" class="flex align-items-center justify-content-center">
+            <tr>
+                <th class="white-space-nowrap">Nazwa projektu</th>
+                <th>Liczba osób</th>
+                <th></th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-project>
+            <tr>
+                <td class="cursor-pointer">
+                    {{ project.name }}
+                </td>
+                <td>
+                    {{ project.id }}
+                </td>
+                <td class="flex justify-content-end">Test</td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="paginatorleft"></ng-template>
+    </p-table>
+</div>
+
+<p-toast [preventOpenDuplicates]="true"></p-toast>

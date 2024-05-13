@@ -1,0 +1,31 @@
+<p-accordion [activeIndex]="0">
+    <p-accordionTab
+        contentStyleClass="flex flex-column gap-4 bg-gray-300"
+        *ngFor="let sprint of sprints$ | async"
+        header="{{ sprint.name }}"
+    >
+        <div *ngFor="let task of sprint.tasks">
+            <p-card header="{{ task.id }} - {{ task.name }}">
+                <div class="flex w-full">
+                    <div class="flex w-full gap-2">
+                        <p>
+                            {{ task.description }} Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque
+                            molestias esse harum sapiente nisi deserunt? Odio veritatis consequuntur, corporis officia,
+                            laboriosam minima architecto amet provident temporibus fuga quasi nisi sunt.
+                        </p>
+                    </div>
+                    <div class="flex flex-column align-items-end w-fit gap-4 ml-5">
+                        <div class="flex gap-2 align-items-center white-space-nowrap">
+                            <p-chip [label]="task.component"></p-chip>
+                            <p-chip [label]="task.task_type"></p-chip>
+                            <p-chip [label]="task.priority"></p-chip>
+                            <p-chip [label]="task.status"></p-chip>
+                            <p-badge size="large" [value]="task.story_points.toString()" />
+                        </div>
+                        <p><strong>Assigned User ID:</strong> {{ task.assigned_user_id }}</p>
+                    </div>
+                </div>
+            </p-card>
+        </div>
+    </p-accordionTab>
+</p-accordion>

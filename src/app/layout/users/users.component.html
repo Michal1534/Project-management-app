@@ -1,0 +1,143 @@
+<div [style.height]="'calc(100vh - ' + 10 + 'rem)'">
+    <p-table
+        *ngIf="users$ | async as users"
+        #table
+        [scrollable]="true"
+        [value]="users"
+        [selectionPageOnly]="true"
+        [rowHover]="true"
+        [rows]="20"
+        scrollHeight="flex"
+        [paginator]="true"
+        class="table-custom"
+    >
+        <ng-template pTemplate="caption">
+            <div class="w-full flex align-items-center justify-content-between">
+                <div class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input
+                        pInputText
+                        type="text"
+                        (input)="table.filter($any($event.target).value, 'name', 'contains')"
+                        placeholder="Wyszukaj projekt"
+                    />
+                </div>
+                <div class="w-full flex align-items-center justify-content-end">
+                    <button
+                        pButton
+                        label="Dodaj nowego użytkownika"
+                        (click)="showModalDialog(true)"
+                        icon="pi pi-plus"
+                        iconPos="right"
+                    ></button>
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header" class="flex align-items-center justify-content-center">
+            <tr>
+                <th class="white-space-nowrap">Nazwa projektu</th>
+                <th>Liczba osób</th>
+                <th></th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-user>
+            <tr>
+                <td class="cursor-pointer">
+                    {{ user.username }}
+                </td>
+                <td>
+                    {{ user.id }}
+                </td>
+                <td class="flex justify-content-end">Test</td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="paginatorleft"></ng-template>
+    </p-table>
+</div>
+
+<p-toast [preventOpenDuplicates]="true"></p-toast>
+
+<p-dialog [(visible)]="visible" [draggable]="false" [resizable]="false">
+    <ng-template pTemplate="header">
+        <h3>Dodaj nowego użytkownika</h3>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <form [formGroup]="userForm">
+            <div class="mb-6">
+                <span class="p-float-label">
+                    <input class="p-3 w-25rem" type="text" formControlName="firstName" pInputText />
+                    <label>First Name</label>
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span class="p-float-label">
+                    <input class="p-3 w-25rem" type="text" formControlName="lastName" pInputText />
+                    <label>Last Name</label>
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span class="p-float-label">
+                    <input class="p-3 w-25rem" type="text" formControlName="position" pInputText />
+                    <label>Position</label>
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span class="p-float-label">
+                    <input class="p-3 w-25rem" type="text" formControlName="username" pInputText />
+                    <label>Nazwa użytkownika</label>
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span class="p-float-label">
+                    <input class="p-3 w-25rem" type="text" formControlName="email" pInputText />
+                    <label>E-mail</label>
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span class="p-float-label">
+                    <p-password formControlName="password" inputStyleClass="p-3 w-25rem" [feedback]="false">
+                    </p-password>
+                    <label>Hasło</label>
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span class="p-float-label">
+                    <p-password formControlName="confirmPassword" inputStyleClass="p-3 w-25rem" [feedback]="false">
+                    </p-password>
+                    <label>Potwierdź hasło</label>
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span class="p-float-label">
+                    <p-dropdown
+                        formControlName="role"
+                        [options]="['Admin', 'User']"
+                        placeholder="Wybierz rolę"
+                        styleClass="w-25rem"
+                    >
+                    </p-dropdown>
+                    <label>Rola</label>
+                </span>
+            </div>
+
+            <div class="flex justify-content-center">
+                <button class="w-25rem p-3" (click)="addNewUser()" type="button" pButton pRipple label="Dodaj"></button>
+            </div>
+        </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <div class="flex justify-content-center">
+            <button (click)="showModalDialog(false)" class="w-25rem p-3" pButton pRipple label="Anuluj"></button>
+        </div>
+    </ng-template>
+</p-dialog>

@@ -1,0 +1,33 @@
+:host {
+  padding: 0 20px 20px;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 70px 1fr;
+  grid-template-areas:
+    "header header"
+    "aside main"
+  ;
+}
+
+.header {
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 600
+}
+
+header {
+  grid-area: header;
+}
+
+aside {
+  grid-area: aside;
+}
+
+main {
+  height: 100%;
+  grid-area: main;
+  background-color: var(--surface-a);
+  border-radius: 6px;
+  margin-left: 20px;
+  padding: 20px 20px;
+}
