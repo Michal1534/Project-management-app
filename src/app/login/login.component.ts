@@ -6,7 +6,7 @@ import { fetchAuthenticatedUserTokenAction } from '../store/queries/fetch-user-t
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
     public loginForm = this.formBuilder.group({

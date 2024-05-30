@@ -23,13 +23,20 @@
                     />
                 </div>
                 <div class="w-full flex align-items-center justify-content-end">
-                    <button pButton label="Dodaj nowy projekt" icon="pi pi-plus" iconPos="right"></button>
+                    <button
+                        pButton
+                        label="Dodaj nowy projekt"
+                        icon="pi pi-plus"
+                        iconPos="right"
+                        (click)="setAddDialogVisible(true)"
+                    ></button>
                 </div>
             </div>
         </ng-template>
 
         <ng-template pTemplate="header" class="flex align-items-center justify-content-center">
             <tr>
+                <th>ID</th>
                 <th class="white-space-nowrap">Nazwa projektu</th>
                 <th>Liczba osób</th>
                 <th></th>
@@ -38,13 +45,35 @@
 
         <ng-template pTemplate="body" let-project>
             <tr>
-                <td class="cursor-pointer">
-                    {{ project.name }}
-                </td>
-                <td>
+                <td [routerLink]="project.id" class="cursor-pointer">
                     {{ project.id }}
                 </td>
-                <td class="flex justify-content-end">Test</td>
+                <td [routerLink]="project.id" class="cursor-pointer">
+                    {{ project.name }}
+                </td>
+                <td [routerLink]="project.id" class="cursor-pointer">
+                    {{ project.userCount }}
+                </td>
+                <td class="flex justify-content-end">
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        icon="pi pi-pencil"
+                        class="p-button-rounded p-button-text"
+                        (click)="editProject(project)"
+                    ></button>
+                    <p-button
+                        pRipple
+                        styleClass="border=none"
+                        icon="pi pi-trash"
+                        size="large"
+                        severity="danger"
+                        [rounded]="true"
+                        [text]="true"
+                        (onClick)="removeProject(project.id)"
+                    />
+                </td>
             </tr>
         </ng-template>
 
@@ -53,3 +82,13 @@
 </div>
 
 <p-toast [preventOpenDuplicates]="true"></p-toast>
+
+<app-add-project *ngIf="visible" [visible]="visible" (closeEventChange)="setAddDialogVisible(false)"> </app-add-project>
+
+<app-edit-project
+    *ngIf="editVisible"
+    [editDialogVisble]="editVisible"
+    [currentProject]="currentProject"
+    (closeEventChange)="setEditSidebarVisibility(false)"
+>
+</app-edit-project>

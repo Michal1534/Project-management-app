@@ -1,0 +1,107 @@
+<div *ngIf="projectName$ | async as projectName">
+    <p-table
+        *ngIf="projectUsers$ | async as projectUsers"
+        #table
+        [scrollable]="true"
+        [value]="projectUsers"
+        [rows]="20"
+        [paginator]="true"
+        [selectionPageOnly]="true"
+        [rowHover]="true"
+        scrollHeight="flex"
+        class="table-custom"
+    >
+        <ng-template pTemplate="caption">
+            <div class="gap-3 flex flex-column">
+                <span class="text-3xl flex justify-content-center">{{ projectName }}</span>
+                <div class="w-full flex align-items-center justify-content-between">
+                    <div class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input
+                            pInputText
+                            type="text"
+                            (input)="table.filter($any($event.target).value, 'user.first_name', 'contains')"
+                            placeholder="Wyszukaj użytkownika"
+                        />
+                    </div>
+                    <div class="w-full flex align-items-center justify-content-end">
+                        <button
+                            pButton
+                            label="Dodaj nowych użytkowników"
+                            icon="pi pi-plus"
+                            iconPos="right"
+                            (click)="showModalDialog(true)"
+                        ></button>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header" class="flex align-items-center justify-content-center">
+            <tr>
+                <th class="white-space-nowrap">Imię i nazwisko</th>
+                <th>Rola użytkownika</th>
+                <th>Specjalizacja</th>
+                <th class=""></th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-user>
+            <tr>
+                <td>{{ user.first_name }} {{ user.last_name }}</td>
+
+                <td>
+                    {{ user.role }}
+                </td>
+                <td>
+                    {{ user.position }}
+                </td>
+                <td class="flex justify-content-end">
+                    <p-button
+                        pRipple
+                        styleClass="border=none"
+                        icon="pi pi-trash"
+                        size="large"
+                        severity="danger"
+                        [rounded]="true"
+                        [text]="true"
+                        (onClick)="removeUserFromProject(user.id)"
+                    />
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="paginatorleft"></ng-template>
+    </p-table>
+</div>
+
+<p-dialog contentStyleClass="w-30rem overflow-hidden" [(visible)]="visible" [draggable]="false" [resizable]="false">
+    <ng-template pTemplate="header">
+        <h3>Przypisz nowych użytkowników do projektu</h3>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <form [formGroup]="projectDetailsForm">
+            <div class="mb-6">
+                <p-multiSelect
+                    optionLabel="fullName"
+                    styleClass="w-27rem"
+                    [options]="this.usersNotInProject"
+                    formControlName="users"
+                    placeholder="Wybierz użytkowników"
+                    panelStyleClass="fixed w-27rem"
+                />
+            </div>
+
+            <div class="flex">
+                <button
+                    class="w-27rem"
+                    (click)="assignUserToProject()"
+                    type="button"
+                    pButton
+                    pRipple
+                    label="Dodaj użytkowników"
+                ></button>
+            </div>
+        </form>
+    </ng-template>
+</p-dialog>

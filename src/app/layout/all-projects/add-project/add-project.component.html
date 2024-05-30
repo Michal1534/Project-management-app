@@ -1,0 +1,26 @@
+<p-dialog [(visible)]="visible" [draggable]="false" [resizable]="false" (onHide)="closeDialog()">
+    <ng-template pTemplate="header">
+        <h3>Dodaj nowy projekt</h3>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <form [formGroup]="projectForm">
+            <div class="mb-6 mt-2">
+                <span class="p-float-label">
+                    <input class="p-3 w-25rem" type="text" formControlName="name" pInputText />
+                    <label>Nazwa projektu</label>
+                </span>
+            </div>
+
+            <div class="flex justify-content-center">
+                <button
+                    class="w-25rem p-3"
+                    (click)="addNewProject()"
+                    type="button"
+                    pButton
+                    pRipple
+                    label="Dodaj"
+                ></button>
+            </div>
+        </form>
+    </ng-template>
+</p-dialog>

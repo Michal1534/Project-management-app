@@ -5,6 +5,7 @@ import { ProjectsComponent } from './projects.component';
 const routes: Routes = [
     { path: '', component: ProjectsComponent },
     { path: ':projectId', loadChildren: () => import('../layout/layout.module').then((m) => m.LayoutModule) },
+    // { path: 'layout', loadChildren: () => import('../layout/layout.module').then((m) => m.LayoutModule) },
 ];
 
 @NgModule({

@@ -9,6 +9,9 @@ import {
     fetchAllProjectsSuccessAction,
     fetchAllProjectsErrorAction,
 } from './fetch-all-projects.action';
+import { addProjectSuccessAction } from '../add-new-project/add-new-project.action';
+import { removeProjectSuccessAction } from '../remove-project/remove-project.action';
+import { editProjectSuccessAction } from '../edit-project/edit-project.action';
 
 @Injectable()
 export class FetchAllProjectsEffect {
@@ -16,10 +19,18 @@ export class FetchAllProjectsEffect {
 
     public fetchAllProjects$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(fetchAllProjectsAction),
+            ofType(
+                fetchAllProjectsAction,
+                addProjectSuccessAction,
+                removeProjectSuccessAction,
+                editProjectSuccessAction
+            ),
             switchMap(() => {
                 return this.httpClient.get<ProjectsResponse[]>(`http://localhost:3000/api/project`).pipe(
-                    map((projects: ProjectsResponse[]) => fetchAllProjectsSuccessAction({ projects })),
+                    map((projects: ProjectsResponse[]) => {
+                        console.log(projects);
+                        return fetchAllProjectsSuccessAction({ projects });
+                    }),
                     catchError((error: Error) => of(fetchAllProjectsErrorAction({ error })))
                 );
             })

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { fetchProjectsAction } from './store/fetch-projects/fetch-projects.action';
 import { Store } from '@ngrx/store';
 import { selectUserProjects } from './store/selectors/user-projects.selector';
@@ -9,6 +9,7 @@ import { selectAuthenticatedUser } from '../store/selectors/authenticated-user.s
     selector: 'app-projects',
     templateUrl: './projects.component.html',
     styleUrl: './projects.component.scss',
+    // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsComponent {
     public projects$ = this.store.select(selectUserProjects);

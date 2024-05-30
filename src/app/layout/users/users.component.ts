@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { selectUsers } from './store/selectors/users.selector';
 import { fetchUsersAction } from './store/fetch-users/fetch-users.action';
@@ -10,6 +10,7 @@ import { addUserAction } from './store/add-new-user/add-new-user.action';
     selector: 'app-users',
     templateUrl: './users.component.html',
     styleUrl: './users.component.scss',
+    // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UsersComponent {
     public users$ = this.store.select(selectUsers);

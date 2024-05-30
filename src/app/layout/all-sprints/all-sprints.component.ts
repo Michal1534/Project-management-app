@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { fetchAllSprintsAction } from './store/fetch-all-sprints/fetch-all-sprints.action';
 import { selectAllSprints } from './store/selectors/all-sprints.selector';
 import { Store } from '@ngrx/store';
@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
     selector: 'app-all-sprints',
     templateUrl: './all-sprints.component.html',
     styleUrl: './all-sprints.component.scss',
+    // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AllSprintsComponent {
     public sprints$ = this.store.select(selectAllSprints);
