@@ -19,14 +19,14 @@
                         pInputText
                         type="text"
                         (input)="table.filter($any($event.target).value, 'name', 'contains')"
-                        placeholder="Wyszukaj projekt"
+                        placeholder="Wyszukaj użytkownika"
                     />
                 </div>
                 <div class="w-full flex align-items-center justify-content-end">
                     <button
                         pButton
                         label="Dodaj nowego użytkownika"
-                        (click)="showModalDialog(true)"
+                        (click)="setAddDialogVisible(true)"
                         icon="pi pi-plus"
                         iconPos="right"
                     ></button>
@@ -36,8 +36,12 @@
 
         <ng-template pTemplate="header" class="flex align-items-center justify-content-center">
             <tr>
-                <th class="white-space-nowrap">Nazwa projektu</th>
-                <th>Liczba osób</th>
+                <th class="white-space-nowrap">Imię i nazwisko</th>
+                <th>Email</th>
+                <th>Doświadczenie</th>
+                <th>Stanowisko</th>
+                <th>Rola</th>
+                <th>FTE</th>
                 <th></th>
             </tr>
         </ng-template>
@@ -48,9 +52,40 @@
                     {{ user.username }}
                 </td>
                 <td>
-                    {{ user.id }}
+                    {{ user.email }}
                 </td>
-                <td class="flex justify-content-end">Test</td>
+                <td>
+                    {{ user.expirience }}
+                </td>
+                <td>
+                    {{ user.position }}
+                </td>
+                <td>
+                    {{ user.role }}
+                </td>
+                <td>
+                    {{ user.workload }}
+                </td>
+                <td class="flex justify-content-end">
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        icon="pi pi-pencil"
+                        class="p-button-rounded p-button-text"
+                        (click)="editUser(user)"
+                    ></button>
+                    <p-button
+                        pRipple
+                        styleClass="border=none"
+                        icon="pi pi-trash"
+                        size="large"
+                        severity="danger"
+                        [rounded]="true"
+                        [text]="true"
+                        (onClick)="removeUser(user.id)"
+                    />
+                </td>
             </tr>
         </ng-template>
 
@@ -60,84 +95,12 @@
 
 <p-toast [preventOpenDuplicates]="true"></p-toast>
 
-<p-dialog [(visible)]="visible" [draggable]="false" [resizable]="false">
-    <ng-template pTemplate="header">
-        <h3>Dodaj nowego użytkownika</h3>
-    </ng-template>
-    <ng-template pTemplate="content">
-        <form [formGroup]="userForm">
-            <div class="mb-6">
-                <span class="p-float-label">
-                    <input class="p-3 w-25rem" type="text" formControlName="firstName" pInputText />
-                    <label>First Name</label>
-                </span>
-            </div>
+<app-add-user *ngIf="visible" [visible]="visible" (closeEventChange)="setAddDialogVisible(false)"> </app-add-user>
 
-            <div class="mb-6">
-                <span class="p-float-label">
-                    <input class="p-3 w-25rem" type="text" formControlName="lastName" pInputText />
-                    <label>Last Name</label>
-                </span>
-            </div>
-
-            <div class="mb-6">
-                <span class="p-float-label">
-                    <input class="p-3 w-25rem" type="text" formControlName="position" pInputText />
-                    <label>Position</label>
-                </span>
-            </div>
-
-            <div class="mb-6">
-                <span class="p-float-label">
-                    <input class="p-3 w-25rem" type="text" formControlName="username" pInputText />
-                    <label>Nazwa użytkownika</label>
-                </span>
-            </div>
-
-            <div class="mb-6">
-                <span class="p-float-label">
-                    <input class="p-3 w-25rem" type="text" formControlName="email" pInputText />
-                    <label>E-mail</label>
-                </span>
-            </div>
-
-            <div class="mb-6">
-                <span class="p-float-label">
-                    <p-password formControlName="password" inputStyleClass="p-3 w-25rem" [feedback]="false">
-                    </p-password>
-                    <label>Hasło</label>
-                </span>
-            </div>
-
-            <div class="mb-6">
-                <span class="p-float-label">
-                    <p-password formControlName="confirmPassword" inputStyleClass="p-3 w-25rem" [feedback]="false">
-                    </p-password>
-                    <label>Potwierdź hasło</label>
-                </span>
-            </div>
-
-            <div class="mb-6">
-                <span class="p-float-label">
-                    <p-dropdown
-                        formControlName="role"
-                        [options]="['Admin', 'User']"
-                        placeholder="Wybierz rolę"
-                        styleClass="w-25rem"
-                    >
-                    </p-dropdown>
-                    <label>Rola</label>
-                </span>
-            </div>
-
-            <div class="flex justify-content-center">
-                <button class="w-25rem p-3" (click)="addNewUser()" type="button" pButton pRipple label="Dodaj"></button>
-            </div>
-        </form>
-    </ng-template>
-    <ng-template pTemplate="footer">
-        <div class="flex justify-content-center">
-            <button (click)="showModalDialog(false)" class="w-25rem p-3" pButton pRipple label="Anuluj"></button>
-        </div>
-    </ng-template>
-</p-dialog>
+<app-edit-user
+    *ngIf="editDialogVisible"
+    [editDialogVisble]="editDialogVisible"
+    [currentUser]="currentUser"
+    (closeEventChange)="setEditDialogVisibility(false)"
+>
+</app-edit-user>

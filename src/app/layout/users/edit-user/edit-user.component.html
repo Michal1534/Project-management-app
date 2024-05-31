@@ -1,0 +1,80 @@
+<p-dialog [(visible)]="editDialogVisble" [draggable]="false" [resizable]="false" (onHide)="closeDialog()">
+    <ng-template pTemplate="header">
+        <h3>Dodaj nowego użytkownika</h3>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <form [formGroup]="userForm">
+            <div class="mb-6 mt-2">
+                <span class="p-float-label">
+                    <input class="p-3 w-25rem" type="text" formControlName="firstName" pInputText />
+                    <label>First Name</label>
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span class="p-float-label">
+                    <input class="p-3 w-25rem" type="text" formControlName="lastName" pInputText />
+                    <label>Last Name</label>
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span class="p-float-label">
+                    <p-dropdown
+                        formControlName="expirience"
+                        [options]="['Junior', 'Mid', 'Senior']"
+                        placeholder="Wybierz rolę"
+                        styleClass="w-25rem"
+                    >
+                    </p-dropdown>
+                    <label>Doświadczenie</label>
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span class="p-float-label">
+                    <input class="p-3 w-25rem" type="text" formControlName="position" pInputText />
+                    <label>Position</label>
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span class="p-float-label">
+                    <input class="p-3 w-25rem" type="text" formControlName="username" pInputText />
+                    <label>Nazwa użytkownika</label>
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span class="p-float-label">
+                    <input class="p-3 w-25rem" type="text" formControlName="email" pInputText />
+                    <label>E-mail</label>
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span class="p-float-label">
+                    <p-dropdown
+                        formControlName="role"
+                        [options]="['Admin', 'User', 'Project Manager']"
+                        placeholder="Wybierz rolę"
+                        styleClass="w-25rem"
+                    >
+                    </p-dropdown>
+                    <label>Rola</label>
+                </span>
+            </div>
+
+            <div class="flex justify-content-center mb-3">
+                <button
+                    class="w-25rem p-3"
+                    (click)="editUserClick()"
+                    type="button"
+                    pButton
+                    pRipple
+                    label="Edytuj"
+                ></button>
+            </div>
+        </form>
+    </ng-template>
+</p-dialog>

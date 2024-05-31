@@ -3,8 +3,12 @@ import { Store, select } from '@ngrx/store';
 import { selectUsers } from './store/selectors/users.selector';
 import { fetchUsersAction } from './store/fetch-users/fetch-users.action';
 import { FormBuilder, Validators } from '@angular/forms';
-import { first } from 'rxjs';
-import { addUserAction } from './store/add-new-user/add-new-user.action';
+import { first, tap } from 'rxjs';
+import { addUserAction, addUserSuccessAction } from './store/add-new-user/add-new-user.action';
+import { Actions, ofType } from '@ngrx/effects';
+import { editUserSuccessAction } from './store/edit-user/edit-user.action';
+import { Users } from '../all-projects/project-details/store/fetch-project-users/fetch-project-users.response';
+import { removeUserAction } from './store/remove-user/remove-user.action';
 
 @Component({
     selector: 'app-users',
@@ -16,41 +20,44 @@ export class UsersComponent {
     public users$ = this.store.select(selectUsers);
 
     public visible = false;
+    public editDialogVisible = false;
+    public currentUser: Users | null;
 
-    public userForm = this.formBuilder.group({
-        username: ['', [Validators.required, Validators.maxLength(50)]],
-        email: ['', [Validators.required, Validators.maxLength(50)]],
-        password: ['', [Validators.required, Validators.maxLength(50)]],
-        firstName: ['', [Validators.required, Validators.maxLength(50)]],
-        lastName: ['', [Validators.required, Validators.maxLength(50)]],
-        role: ['', [Validators.required, Validators.maxLength(50)]],
-        position: ['', [Validators.required, Validators.maxLength(50)]],
-    });
-
-    constructor(private store: Store, private formBuilder: FormBuilder) {
+    constructor(private store: Store, private formBuilder: FormBuilder, private actions$: Actions) {
         this.store.dispatch(fetchUsersAction());
+
+        this.actions$
+            .pipe(
+                ofType(addUserSuccessAction),
+                tap(() => (this.visible = false))
+            )
+            .subscribe();
+
+        this.actions$
+            .pipe(
+                ofType(editUserSuccessAction),
+                tap(() => (this.editDialogVisible = false))
+            )
+            .subscribe();
     }
 
-    public showModalDialog(visible: boolean) {
-        this.visible = visible;
+    public setAddDialogVisible(isVisible: boolean): void {
+        this.visible = isVisible;
     }
 
-    public addNewUser() {
-        this.showModalDialog(false);
-        this.store.dispatch(
-            addUserAction({
-                user: {
-                    username: this.userForm.value.username!,
-                    email: this.userForm.value.email!,
-                    password: this.userForm.value.password!,
-                    firstName: this.userForm.value.firstName!,
-                    lastName: this.userForm.value.lastName!,
-                    role: this.userForm.value.role!,
-                    position: this.userForm.value.position!,
-                    availability: true,
-                    workload: 0,
-                },
-            })
-        );
+    public setEditDialogVisibility(isVisible: boolean): void {
+        if (!isVisible) {
+            this.currentUser = null;
+        }
+        this.editDialogVisible = isVisible;
+    }
+
+    public editUser(user: Users) {
+        this.currentUser = user;
+        this.setEditDialogVisibility(true);
+    }
+
+    public removeUser(userId: number) {
+        this.store.dispatch(removeUserAction({ userId }));
     }
 }

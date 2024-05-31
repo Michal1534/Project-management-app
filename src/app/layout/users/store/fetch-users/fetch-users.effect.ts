@@ -6,6 +6,8 @@ import { Store } from '@ngrx/store';
 import { UsersResponse } from './fetch-users.response';
 import { fetchUsersAction, fetchUsersErrorAction, fetchUsersSuccessAction } from './fetch-users.action';
 import { addUserSuccessAction } from '../add-new-user/add-new-user.action';
+import { editUserSuccessAction } from '../edit-user/edit-user.action';
+import { removeUserSuccessAction } from '../remove-user/remove-user.action';
 
 @Injectable()
 export class FetchUsersEffect {
@@ -13,7 +15,7 @@ export class FetchUsersEffect {
 
     public fetchUsers$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(fetchUsersAction, addUserSuccessAction),
+            ofType(fetchUsersAction, addUserSuccessAction, editUserSuccessAction, removeUserSuccessAction),
             switchMap(() => {
                 return this.httpClient.get<UsersResponse[]>(`http://localhost:3000/api/users`).pipe(
                     map((users: UsersResponse[]) => fetchUsersSuccessAction({ users })),

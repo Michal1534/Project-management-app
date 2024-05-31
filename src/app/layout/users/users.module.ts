@@ -9,15 +9,19 @@ import { USERS_STATE_FEATURE_KEY } from './store/users-state.selector';
 import { usersReducer } from './store/users.reducer';
 import { UsersComponent } from './users.component';
 import { AddUserEffect } from './store/add-new-user/add-new-user.effect';
+import { AddUserComponent } from './add-user/add-user.component';
+import { EditUserComponent } from './edit-user/edit-user.component';
+import { EditUserEffect } from './store/edit-user/edit-user.effect';
+import { RemoveUserEffect } from './store/remove-user/remove-user.effect';
 
 @NgModule({
-    declarations: [UsersComponent],
+    declarations: [UsersComponent, AddUserComponent, EditUserComponent],
     imports: [
         CommonModule,
         UsersRoutingModule,
         SharedModule,
         StoreModule.forFeature(USERS_STATE_FEATURE_KEY, usersReducer),
-        EffectsModule.forFeature([FetchUsersEffect, AddUserEffect]),
+        EffectsModule.forFeature([FetchUsersEffect, AddUserEffect, EditUserEffect, RemoveUserEffect]),
     ],
 })
 export class UsersModule {}
