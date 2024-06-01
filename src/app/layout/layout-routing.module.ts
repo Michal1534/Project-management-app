@@ -19,6 +19,10 @@ const routes: Routes = [
                 path: 'all-sprints',
                 loadChildren: () => import('./all-sprints/all-sprints.module').then((m) => m.AllSprintsModule),
             },
+            {
+                path: 'holidays',
+                loadChildren: () => import('./holidays/holidays.module').then((m) => m.HolidaysModule),
+            },
         ],
     },
 ];

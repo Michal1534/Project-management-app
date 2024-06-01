@@ -25,7 +25,7 @@ export class LayoutComponent implements OnInit {
             { label: 'Obecny Spring', routerLink: 'dashboard' },
             { label: 'Użytkownicy', routerLink: 'users' },
             { label: 'Pozostałe sprinty', routerLink: 'all-sprints' },
-            { label: 'Urlopy', routerLink: 'errand-list' },
+            { label: 'Urlopy', routerLink: 'holidays' },
             { label: 'Projekty', routerLink: 'all-projects' },
         ];
         this.itemsWorker = [

@@ -42,12 +42,18 @@ import { PanelModule } from 'primeng/panel';
 import { AccordionModule } from 'primeng/accordion';
 import { BadgeModule } from 'primeng/badge';
 import { ChipModule } from 'primeng/chip';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import { InputMaskModule } from 'primeng/inputmask';
 
 const ANGULAR_MODULES = [CommonModule, ReactiveFormsModule, FormsModule];
 
 const PRIMENG_MODULES = [
     PanelModule,
+    InputMaskModule,
     ChipModule,
+    FullCalendarModule,
     AccordionModule,
     BadgeModule,
     SelectButtonModule,

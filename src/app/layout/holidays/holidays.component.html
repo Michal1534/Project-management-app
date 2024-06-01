@@ -1,0 +1,87 @@
+<full-calendar *ngIf="allHoliday$ | async" [options]="calendarOptions" [events]="allHoliday$ | async"> </full-calendar>
+
+<!-- <ng-template #emptyCallendar>
+    <full-calendar [options]="calendarOptions"></full-calendar>
+</ng-template> -->
+
+<p-dialog
+    contentStyleClass="w-30rem overflow-hidden"
+    [(visible)]="isDialogVisible"
+    [draggable]="false"
+    [resizable]="false"
+    [modal]="true"
+>
+    <ng-template pTemplate="header">
+        <h3>Dodaj nowy urlop</h3>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <form [formGroup]="holidayForm">
+            <div class="mb-6 mt-2">
+                <span class="p-float-label">
+                    <p-inputMask
+                        mask="99/99/9999"
+                        styleClass="w-27rem"
+                        formControlName="startDate"
+                        placeholder="dd/mm/yyyy"
+                    />
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span class="p-float-label">
+                    <p-inputMask
+                        mask="99/99/9999"
+                        styleClass="w-27rem"
+                        formControlName="endDate"
+                        placeholder="dd/mm/yyyy"
+                    />
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span class="p-float-label">
+                    <input class="w-27rem" type="text" formControlName="reason" pInputText />
+                    <label>Powód</label>
+                </span>
+            </div>
+
+            <div class="flex">
+                <button class="w-27rem p-3" type="button" pButton pRipple label="Dodaj" (click)="addHoliday()"></button>
+            </div>
+        </form>
+    </ng-template>
+</p-dialog>
+
+<p-dialog
+    contentStyleClass="w-30rem overflow-hidden"
+    [(visible)]="isDetailsVisible"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+>
+    <ng-template pTemplate="header">
+        <h3>Szczegóły urlop</h3>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <div class="mb-2"><span class="font-semibold">Imię i nazwisko:</span> {{ currentEvent.user }}</div>
+        <div class="mb-2"><span class="font-semibold">Powód:</span> {{ currentEvent.reason }}</div>
+        <div class="mb-2"><span class="font-semibold">Data rozpoczęcia urlopu:</span> {{ currentEvent.start }}</div>
+        <div class="mb-2"><span class="font-semibold">Data zakończenia urlopu::</span> {{ currentEvent.end }}</div>
+        <div *ngIf="userId === currentEvent.userId" class="flex mt-3">
+            <button
+                class="w-27rem p-3 p-button-danger"
+                type="button"
+                pButton
+                pRipple
+                label="Usuń urlop"
+                (click)="removeHoliday(currentEvent.id)"
+            ></button>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<!-- <p-dialog [draggable]="false" [resizable]="false" header="Szczegóły urlopu" [(visible)]="isDetailsVisible">
+    <div class="mb-2"><span class="font-semibold">Imię i nazwisko klienta:</span> {{ currentEvent.title }}</div>
+    <div class="mb-2"><span class="font-semibold">Adres klienta:</span> {{ currentEvent.start }}</div>
+    <div class="mb-2"><span class="font-semibold">Dane odnośnie zlecenia:</span> {{ currentEvent.end }}</div>
+</p-dialog> -->
