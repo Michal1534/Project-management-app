@@ -1,0 +1,100 @@
+<p-dialog [(visible)]="visible" [draggable]="false" [resizable]="false" (onHide)="closeDialog()">
+    <ng-template pTemplate="header">
+        <h3>Dodaj nowe zadanie</h3>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <form [formGroup]="taskForm">
+            <div class="mb-6 mt-2">
+                <span class="p-float-label">
+                    <input class="p-3 w-25rem" type="text" formControlName="name" pInputText />
+                    <label>Nazwa taska</label>
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span>
+                    <p-dropdown
+                        styleClass="w-25rem"
+                        [options]="['Do zrobienia', 'W trakcie', 'Zrobione']"
+                        formControlName="status"
+                        placeholder="Status taska"
+                    />
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span>
+                    <p-dropdown
+                        styleClass="w-25rem"
+                        [options]="['Niski', 'Średni', 'Wysoki']"
+                        formControlName="priority"
+                        placeholder="Priorytet"
+                    />
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span>
+                    <p-dropdown
+                        styleClass="w-25rem"
+                        [options]="[0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144]"
+                        formControlName="storyPoints"
+                        placeholder="Story points"
+                    />
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span>
+                    <p-dropdown
+                        styleClass="w-25rem"
+                        [options]="['Zadanie', 'Błąd', 'Usprawnienie']"
+                        formControlName="type"
+                        placeholder="Typ zadania"
+                    />
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span>
+                    <p-dropdown
+                        styleClass="w-25rem"
+                        [options]="['Frontend', 'Backend', 'Baza danych', 'DevOps']"
+                        formControlName="component"
+                        placeholder="Komponent"
+                    />
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span>
+                    <p-dropdown
+                        styleClass="w-25rem"
+                        [options]="usersInProject"
+                        optionLabel="fullName"
+                        optionValue="id"
+                        formControlName="assignedTo"
+                        placeholder="Przypisany do (opcjonalne)"
+                    />
+                </span>
+            </div>
+
+            <div class="mb-6">
+                <span class="p-float-label">
+                    <textarea rows="20" cols="42" formControlName="description" placeholder="Opis zadania"></textarea>
+                </span>
+            </div>
+
+            <div class="flex justify-content-center">
+                <button
+                    class="w-25rem p-3"
+                    (click)="addNewTask()"
+                    type="button"
+                    pButton
+                    pRipple
+                    label="Dodaj zadanie"
+                ></button>
+            </div>
+        </form>
+    </ng-template>
+</p-dialog>

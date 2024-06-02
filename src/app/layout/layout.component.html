@@ -2,7 +2,17 @@
     <div class="h-full flex flex-row align-items-center">
         <div class="header w-full flex justify-content-center text-3xl">Zarządzanie projektami</div>
         <div class="flex justify-content-end">
-            <div>Test</div>
+            <p-button
+                pRipple
+                size="large"
+                styleClass="border=none"
+                icon="pi pi-power-off"
+                size="large"
+                severity="danger"
+                [rounded]="true"
+                [text]="true"
+                (onClick)="logout()"
+            />
         </div>
     </div>
 </header>

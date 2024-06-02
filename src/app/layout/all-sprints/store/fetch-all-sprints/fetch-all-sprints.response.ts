@@ -1,8 +1,9 @@
 export interface SprintsResponse {
     id: number;
     name: string;
-    startDate: string;
-    endDate: string;
+    status: string;
+    start_date: Date;
+    end_date: Date;
     projectId: number;
     createdAt: string;
     updatedAt: string;
@@ -23,6 +24,10 @@ export interface SprintsResponse {
         task_type: string;
         priority: string;
         status: string;
+        assigned_user: {
+            first_name: string;
+            last_name: string;
+        };
         created_at: string;
         component: string;
         story_points: number;

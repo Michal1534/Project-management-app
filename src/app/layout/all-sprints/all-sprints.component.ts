@@ -3,6 +3,15 @@ import { fetchAllSprintsAction } from './store/fetch-all-sprints/fetch-all-sprin
 import { selectAllSprints } from './store/selectors/all-sprints.selector';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
+import { Actions, ofType } from '@ngrx/effects';
+import { add } from 'date-fns';
+import { addSprintSuccessAction } from './store/add-new-sprint/add-new-sprint.action';
+import { tap } from 'rxjs';
+import { startSprintSuccessAction } from './store/start-sprint/start-sprint.action';
+import { SprintsResponse } from './store/fetch-all-sprints/fetch-all-sprints.response';
+import { format } from 'date-fns';
+import { removeSprintAction } from './store/remove-sprint/remove-sprint.action';
+import { endSprintAction } from './store/end-sprint/end-sprint.action';
 
 @Component({
     selector: 'app-all-sprints',
@@ -12,12 +21,64 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class AllSprintsComponent {
     public sprints$ = this.store.select(selectAllSprints);
+    public visible = false;
+    public startSprintVisible = false;
+    public taskVisible = false;
+    public currentSprint?: SprintsResponse;
+    public projectId: string;
+    public sprintId: number;
 
-    constructor(private store: Store, private route: ActivatedRoute) {
+    constructor(private store: Store, private route: ActivatedRoute, private actions$: Actions) {
         this.route.params.subscribe((params) => {
-            console.log(params['projectId']);
+            this.projectId = params['projectId'];
             this.store.dispatch(fetchAllSprintsAction({ projectId: params['projectId'] }));
         });
-        // this.store.dispatch(fetchAllSprintsAction({ projectId: '1' }));
+
+        this.actions$
+            .pipe(
+                ofType(addSprintSuccessAction),
+                tap(() => (this.visible = false))
+            )
+            .subscribe();
+
+        this.actions$
+            .pipe(
+                ofType(startSprintSuccessAction),
+                tap(() => (this.startSprintVisible = false))
+            )
+            .subscribe();
+    }
+
+    public setAddDialogVisible(isVisible: boolean): void {
+        this.visible = isVisible;
+    }
+
+    public setAddTaskDialogVisible(isVisible: boolean, sprintId: number): void {
+        this.sprintId = sprintId;
+        this.taskVisible = isVisible;
+    }
+
+    public setStartDialogVisible(isVisible: boolean, sprint?: SprintsResponse): void {
+        this.currentSprint = sprint;
+        this.startSprintVisible = isVisible;
+    }
+
+    public removeSprint(sprintId: number): void {
+        this.store.dispatch(removeSprintAction({ sprintId, projectId: Number(this.projectId) }));
+    }
+
+    public endSprintClick(sprint: SprintsResponse): void {
+        this.store.dispatch(
+            endSprintAction({
+                sprint: {
+                    endDate: sprint.end_date,
+                    id: sprint.id,
+                    name: sprint.name,
+                    projectId: Number(this.projectId),
+                    startDate: sprint.start_date,
+                    status: 'ENDED',
+                },
+            })
+        );
     }
 }
