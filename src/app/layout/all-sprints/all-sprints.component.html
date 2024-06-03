@@ -7,11 +7,11 @@
         (click)="setAddDialogVisible(true)"
     ></button>
 </div>
-<p-accordion [activeIndex]="0">
-    <p-accordionTab contentStyleClass="flex flex-column gap-4 bg-gray-200" *ngFor="let sprint of sprints$ | async">
+<p-accordion>
+    <p-accordionTab contentStyleClass="flex flex-column gap-2 bg-gray-100" *ngFor="let sprint of sprints$ | async">
         <ng-template pTemplate="header">
             <div class="flex align-items-center justify-content-between w-full">
-                <div class="flex gap-5">
+                <div class="flex gap-3">
                     <h2>{{ sprint.name }}</h2>
                     <div *ngIf="sprint.start_date && sprint.end_date" class="flex align-items-center">
                         <p class="mr-1">{{ sprint.start_date | date : 'dd/MM/yyyy' }}</p>
@@ -41,7 +41,7 @@
                 </div>
             </div>
         </ng-template>
-        <div class="flex justify-content-end mb-4">
+        <div class="flex justify-content-end">
             <button
                 pButton
                 label="Dodaj nowe zadanie"
@@ -51,14 +51,19 @@
             ></button>
         </div>
         <div *ngFor="let task of sprint.tasks">
-            <p-card header="{{ task.id }} - {{ task.name }}">
+            <p-card>
+                <ng-template pTemplate="header"
+                    ><h2 class="p-2 m-0 cursor-pointer" [routerLink]="task.id.toString()">
+                        {{ task.id }} - {{ task.name }}
+                    </h2>
+                </ng-template>
                 <div class="flex w-full">
                     <div class="flex w-full gap-2">
                         <p>
                             {{ task.description }}
                         </p>
                     </div>
-                    <div class="flex flex-column align-items-end w-fit gap-4 ml-5">
+                    <div class="flex flex-column align-items-end w-fit gap-2 ml-5">
                         <div class="flex gap-2 align-items-center white-space-nowrap">
                             <p-chip [label]="task.component"></p-chip>
                             <p-chip [label]="task.task_type"></p-chip>

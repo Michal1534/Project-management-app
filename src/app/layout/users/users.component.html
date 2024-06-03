@@ -18,7 +18,7 @@
                     <input
                         pInputText
                         type="text"
-                        (input)="table.filter($any($event.target).value, 'name', 'contains')"
+                        (input)="table.filter($any($event.target).value, 'first_name', 'contains')"
                         placeholder="Wyszukaj użytkownika"
                     />
                 </div>
@@ -41,16 +41,13 @@
                 <th>Doświadczenie</th>
                 <th>Stanowisko</th>
                 <th>Rola</th>
-                <th>FTE</th>
                 <th></th>
             </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-user>
             <tr>
-                <td class="cursor-pointer">
-                    {{ user.username }}
-                </td>
+                <td class="cursor-pointer">{{ user.first_name }} {{ user.last_name }}</td>
                 <td>
                     {{ user.email }}
                 </td>
@@ -62,9 +59,6 @@
                 </td>
                 <td>
                     {{ user.role }}
-                </td>
-                <td>
-                    {{ user.workload }}
                 </td>
                 <td class="flex justify-content-end">
                     <button

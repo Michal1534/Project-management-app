@@ -75,7 +75,7 @@ export class HolidaysComponent {
         locale: 'pl',
         titleFormat: { month: 'long', year: 'numeric' },
         headerToolbar: {
-            left: 'today prev,next',
+            left: '',
             center: 'title',
         },
         buttonText: {

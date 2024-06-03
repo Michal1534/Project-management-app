@@ -1,0 +1,74 @@
+<div class="flex flex-column gap-2">
+    <p-card *ngIf="task$ | async as task" header="Szczegóły zadania">
+        <p-fieldset>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="flex flex-column">
+                    <p>Nazwa:</p>
+                    <p>Typ zadania:</p>
+                    <p>Priorytet:</p>
+                    <p>Status:</p>
+                    <p>Przypisany użytkownik:</p>
+                    <p>Komponent:</p>
+                    <p>Punkty historii:</p>
+                    <p>Data utworzenia:</p>
+                    <p>Utworzony przez:</p>
+                    <p>Opis:</p>
+                </div>
+                <div class="flex flex-column">
+                    <p>{{ task.name }}</p>
+                    <p>{{ task.task_type }}</p>
+                    <p>{{ task.priority }}</p>
+                    <p>{{ task.status }}</p>
+                    <p>{{ task.assigned_user.first_name }} {{ task.assigned_user.last_name }}</p>
+                    <p>{{ task.component }}</p>
+                    <p>{{ task.story_points }}</p>
+                    <p>{{ task.created_at | date : 'dd MM yyyy' }}</p>
+                    <p>{{ task.reported_by_user.first_name }} {{ task.reported_by_user.last_name }}</p>
+                    <p>{{ task.description }}</p>
+                </div>
+            </div>
+        </p-fieldset>
+    </p-card>
+
+    <p-card header="Komentarze">
+        <form [formGroup]="commentForm">
+            <div class="mb-2">
+                <span>
+                    <textarea
+                        rows="5"
+                        formControlName="comment_content"
+                        class="w-full"
+                        placeholder="Dodaj komentarz..."
+                    >
+                    </textarea>
+                </span>
+            </div>
+            <div class="flex">
+                <button
+                    class="w-10rem p-3"
+                    type="button"
+                    pButton
+                    pRipple
+                    label="Dodaj komentarz"
+                    (click)="addComment()"
+                ></button>
+            </div>
+        </form>
+        <div *ngFor="let comment of comments$ | async">
+            <div>
+                <div class="h-fit flex align-items-center gap-2">
+                    <p class="text-2xl m-0 font-bold">{{ comment.user.first_name }} {{ comment.user.last_name }}</p>
+                    <p>{{ comment.timestamp | date : 'hh:mm dd MM yyyy' }}</p>
+                </div>
+                <p>{{ comment.comment_content }}</p>
+                <p-button
+                    *ngIf="comment.user.id === userId"
+                    label="Usuń"
+                    styleClass="pl-0 disable-flex"
+                    [link]="true"
+                    (click)="removeComment(comment.id)"
+                />
+            </div>
+        </div>
+    </p-card>
+</div>

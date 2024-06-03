@@ -1,7 +1,9 @@
 <div class="h-full flex flex-column gap-5 justify-content-center align-items-center">
     <ng-container *ngIf="(projects$ | async)?.length; else noProjects">
+        <h2>Dostępne projekty</h2>
         <div *ngFor="let project of projects$ | async">
             <p-button
+                styleClass="w-25rem h-4rem"
                 [routerLink]="project.project.id.toString()"
                 [raised]="true"
                 size="large"

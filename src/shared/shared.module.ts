@@ -46,12 +46,14 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { InputMaskModule } from 'primeng/inputmask';
+import { FieldsetModule } from 'primeng/fieldset';
 
 const ANGULAR_MODULES = [CommonModule, ReactiveFormsModule, FormsModule];
 
 const PRIMENG_MODULES = [
     PanelModule,
     InputMaskModule,
+    FieldsetModule,
     ChipModule,
     FullCalendarModule,
     AccordionModule,

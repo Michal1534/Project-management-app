@@ -22,9 +22,9 @@ export class LayoutComponent implements OnInit {
 
     ngOnInit(): void {
         this.itemsOwner = [
-            { label: 'Obecny Spring', routerLink: 'dashboard' },
+            { label: 'Obecny Sprint', routerLink: 'dashboard' },
             { label: 'Użytkownicy', routerLink: 'users' },
-            { label: 'Pozostałe sprinty', routerLink: 'all-sprints' },
+            { label: 'Pozostałe Sprinty', routerLink: 'all-sprints' },
             { label: 'Urlopy', routerLink: 'holidays' },
             { label: 'Projekty', routerLink: 'all-projects' },
         ];
