@@ -1,4 +1,4 @@
-<div [style.height]="'calc(100vh - ' + 10 + 'rem)'">
+<div *ngIf="authenticatedUser$ | async as authenticatedUser" [style.height]="'calc(100vh - ' + 10 + 'rem)'">
     <p-table
         *ngIf="users$ | async as users"
         #table
@@ -24,9 +24,12 @@
                 </div>
                 <div class="w-full flex align-items-center justify-content-end">
                     <button
+                        *ngIf="authenticatedUser.role !== 'User'"
                         pButton
                         label="Dodaj nowego użytkownika"
-                        (click)="setAddDialogVisible(true)"
+                        (click)="
+                            authenticatedUser.role === 'Admin' ? setAddDialogVisible(true) : (this.assignVisible = true)
+                        "
                         icon="pi pi-plus"
                         iconPos="right"
                     ></button>
@@ -41,13 +44,13 @@
                 <th>Doświadczenie</th>
                 <th>Stanowisko</th>
                 <th>Rola</th>
-                <th></th>
+                <th *ngIf="authenticatedUser.role !== 'User'"></th>
             </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-user>
             <tr>
-                <td class="cursor-pointer">{{ user.first_name }} {{ user.last_name }}</td>
+                <td>{{ user.first_name }} {{ user.last_name }}</td>
                 <td>
                     {{ user.email }}
                 </td>
@@ -60,8 +63,9 @@
                 <td>
                     {{ user.role }}
                 </td>
-                <td class="flex justify-content-end">
+                <td *ngIf="authenticatedUser.role !== 'User'" class="flex justify-content-end">
                     <button
+                        *ngIf="authenticatedUser.role === 'Admin'"
                         pButton
                         pRipple
                         type="button"
@@ -98,3 +102,39 @@
     (closeEventChange)="setEditDialogVisibility(false)"
 >
 </app-edit-user>
+
+<p-dialog
+    contentStyleClass="w-30rem overflow-hidden"
+    [(visible)]="assignVisible"
+    [draggable]="false"
+    [resizable]="false"
+>
+    <ng-template pTemplate="header">
+        <h3>Przypisz nowych użytkowników do projektu</h3>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <form [formGroup]="assignUserForm">
+            <div class="mb-6">
+                <p-multiSelect
+                    optionLabel="fullName"
+                    styleClass="w-27rem"
+                    [options]="this.usersNotInProject"
+                    formControlName="users"
+                    placeholder="Wybierz użytkowników"
+                    panelStyleClass="fixed w-27rem"
+                />
+            </div>
+
+            <div class="flex">
+                <button
+                    class="w-27rem"
+                    (click)="assignUserToProject()"
+                    type="button"
+                    pButton
+                    pRipple
+                    label="Dodaj użytkowników"
+                ></button>
+            </div>
+        </form>
+    </ng-template>
+</p-dialog>

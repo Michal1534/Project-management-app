@@ -1,5 +1,7 @@
-<full-calendar *ngIf="allHoliday$ | async" [options]="calendarOptions" [events]="allHoliday$ | async"> </full-calendar>
-
+<div class="h-full overflow-auto">
+    <full-calendar *ngIf="allHoliday$ | async" [options]="calendarOptions" [events]="allHoliday$ | async">
+    </full-calendar>
+</div>
 <!-- <ng-template #emptyCallendar>
     <full-calendar [options]="calendarOptions"></full-calendar>
 </ng-template> -->

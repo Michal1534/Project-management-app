@@ -12,9 +12,9 @@ export class EditUserEffect {
     public editUser$ = createEffect(() =>
         this.actions$.pipe(
             ofType(editUserAction),
-            switchMap(({ userId, user }: { userId: number; user: EditUser }) => {
+            switchMap(({ projectId, userId, user }: { projectId: string; userId: number; user: EditUser }) => {
                 return this.httpClient.put(`http://localhost:3000/api/users/${userId}`, { ...user }).pipe(
-                    map(() => editUserSuccessAction()),
+                    map(() => editUserSuccessAction({ projectId })),
                     catchError((error: Error) => of(editUserErrorAction({ error })))
                 );
             })

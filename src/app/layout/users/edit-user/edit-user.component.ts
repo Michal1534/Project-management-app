@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { editUserAction } from '../store/edit-user/edit-user.action';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-edit-user',
@@ -13,6 +14,8 @@ export class EditUserComponent {
 
     @Output() public closeEventChange = new EventEmitter<void>();
 
+    public projectId: string = '';
+
     public userForm = this.formBuilder.group({
         username: ['', [Validators.required, Validators.maxLength(50)]],
         email: ['', [Validators.required, Validators.maxLength(50)]],
@@ -23,10 +26,13 @@ export class EditUserComponent {
         expirience: ['', [Validators.required, Validators.maxLength(50)]],
     });
 
-    constructor(private formBuilder: FormBuilder, private store: Store) {}
+    constructor(private formBuilder: FormBuilder, private store: Store, private activatedRoute: ActivatedRoute) {
+        this.activatedRoute.params.subscribe((params) => {
+            this.projectId = params['projectId'];
+        });
+    }
 
     public ngOnInit(): void {
-        console.log(this.currentUser);
         this.userForm.patchValue({
             username: this.currentUser?.username!,
             email: this.currentUser?.email!,
@@ -65,6 +71,7 @@ export class EditUserComponent {
                     expirience: this.userForm.value.expirience!,
                     workload: 0,
                 },
+                projectId: this.projectId,
             })
         );
     }

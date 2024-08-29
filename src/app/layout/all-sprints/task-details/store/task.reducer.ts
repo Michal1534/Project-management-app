@@ -2,9 +2,9 @@ import { createReducer, on } from '@ngrx/store';
 import { TaskState } from './task-state';
 import { fetchTaskSuccessAction } from './fetch-task/fetch-task.action';
 import { TaskResponse } from './fetch-task/fetch-task.response';
-import { fetchProjectUsersSuccessAction } from '../../store/fetch-project-users/fetch-project-users.action';
 import { ProjectUsers } from '../../store/fetch-project-users/fetch-project-users.response';
 import { fetchCommentsSuccessAction } from './fetch-comments/fetch-comments.action';
+import { fetchProjectUsersSuccessAction } from './fetch-project-users/fetch-project-users.action';
 
 export const taskInitialState: TaskState = {
     task: {
@@ -26,6 +26,7 @@ export const taskInitialState: TaskState = {
         task_type: '',
     },
     comments: [],
+    projectUsers: [],
 };
 
 export const taskReducer = createReducer(
@@ -37,5 +38,12 @@ export const taskReducer = createReducer(
     on(fetchTaskSuccessAction, (taskState: TaskState, { task }: { task: TaskResponse }) => ({
         ...taskState,
         task: task,
-    }))
+    })),
+    on(
+        fetchProjectUsersSuccessAction,
+        (allSprintsState: TaskState, { projectUsers }: { projectUsers: ProjectUsers }) => ({
+            ...allSprintsState,
+            projectUsers: projectUsers.users,
+        })
+    )
 );

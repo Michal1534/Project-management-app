@@ -17,6 +17,7 @@ import { EndSprintEffect } from './store/end-sprint/end-sprint.effect';
 import { AddTaskComponent } from './add-task/add-task.component';
 import { FetchProjectUsersEffect } from './store/fetch-project-users/fetch-project-users.effect';
 import { AddTaskEffect } from './store/add-task/add-new-sprint.effect';
+import { RemoveTaskEffect } from './store/remove-task/remove-task.effect';
 
 @NgModule({
     declarations: [AllSprintsComponent, AddSprintComponent, StartSprintComponent, AddTaskComponent],
@@ -33,6 +34,7 @@ import { AddTaskEffect } from './store/add-task/add-new-sprint.effect';
             EndSprintEffect,
             FetchProjectUsersEffect,
             AddTaskEffect,
+            RemoveTaskEffect,
         ]),
     ],
 })

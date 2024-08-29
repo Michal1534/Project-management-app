@@ -18,9 +18,33 @@ import { removeHolidayAction, removeHolidaySuccessAction } from './store/remove-
 @Component({
     selector: 'app-holidays',
     templateUrl: './holidays.component.html',
-    // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HolidaysComponent {
+    public calendarOptions: CalendarOptions = {
+        contentHeight: '80vh',
+        initialView: 'dayGridMonth',
+        plugins: [dayGridPlugin, interactionPlugin],
+        locale: 'pl',
+        titleFormat: { month: 'long', year: 'numeric' },
+        headerToolbar: {
+            left: '',
+            center: 'title',
+        },
+        buttonText: {
+            today: 'Obecny miesiąc',
+        },
+        selectable: true,
+        selectMirror: true,
+        allDaySlot: false,
+        dayHeaderFormat: { weekday: 'long' },
+        displayEventTime: true,
+        displayEventEnd: true,
+        slotDuration: '01:00:00',
+        hiddenDays: [0, 6],
+        eventClick: this.openDialog.bind(this),
+        select: this.openAddDialog.bind(this),
+    };
+
     public isDialogVisible: boolean;
     public isDetailsVisible: boolean;
     public currentEvent: any;
@@ -28,20 +52,6 @@ export class HolidaysComponent {
     public projectId: number;
 
     public authenticatedUser$ = this.store.select(selectAuthenticatedUser);
-    // public allHoliday$ = this.store.select(selectAllHolidays).pipe(
-    //     // filter((holidays: any[]) => holidays.length > 0),
-    //     tap((holidays: any[]) => {
-    //         this.holidays = holidays.map((holiday: any) => ({
-    //             title: holiday.reason,
-    //             start: holiday.start_date,
-    //             end: holiday.end_date,
-    //             allDay: true,
-    //         }));
-    //         this.calendarOptions.events = this.holidays || null;
-    //         console.log(this.holidays);
-    //         console.log(this.calendarOptions.events);
-    //     })
-    // );
 
     public allHoliday$ = this.store.select(selectAllHolidays).pipe(
         map((holidays: any[]) =>
@@ -68,31 +78,6 @@ export class HolidaysComponent {
         reason: ['', [Validators.required, Validators.maxLength(50)]],
     });
 
-    public calendarOptions: CalendarOptions = {
-        contentHeight: '80vh',
-        initialView: 'dayGridMonth',
-        plugins: [dayGridPlugin, interactionPlugin],
-        locale: 'pl',
-        titleFormat: { month: 'long', year: 'numeric' },
-        headerToolbar: {
-            left: '',
-            center: 'title',
-        },
-        buttonText: {
-            today: 'Obecny miesiąc',
-        },
-        selectable: true,
-        selectMirror: true,
-        allDaySlot: false,
-        dayHeaderFormat: { weekday: 'long' },
-        displayEventTime: true,
-        displayEventEnd: true,
-        slotDuration: '01:00:00',
-        hiddenDays: [0, 6],
-        eventClick: this.openDialog.bind(this),
-        select: this.openAddDialog.bind(this),
-    };
-
     public openAddDialog(info: any): void {
         this.holidayForm.patchValue({
             startDate: format(new Date(info.startStr), 'dd/MM/yyyy'),
@@ -103,7 +88,6 @@ export class HolidaysComponent {
     }
 
     public openDialog(info: any): void {
-        console.log(info);
         this.currentEvent = {
             id: info.event.extendedProps.id,
             userId: info.event.extendedProps.userId,
@@ -143,7 +127,6 @@ export class HolidaysComponent {
             )
             .subscribe();
 
-        console.log(this.holidays);
     }
 
     public addHoliday(): void {

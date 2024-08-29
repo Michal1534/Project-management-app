@@ -14,6 +14,7 @@ import { startSprintSuccessAction } from '../start-sprint/start-sprint.action';
 import { removeSprintSuccessAction } from '../remove-sprint/remove-sprint.action';
 import { endSprintSuccessAction } from '../end-sprint/end-sprint.action';
 import { addTaskSuccessAction } from '../add-task/add-new-sprint.action';
+import { removeTaskSuccessAction } from '../remove-task/remove-task.action';
 
 @Injectable()
 export class FetchAllSprintsEffect {
@@ -27,7 +28,8 @@ export class FetchAllSprintsEffect {
                 startSprintSuccessAction,
                 removeSprintSuccessAction,
                 endSprintSuccessAction,
-                addTaskSuccessAction
+                addTaskSuccessAction,
+                removeTaskSuccessAction
             ),
             switchMap(({ projectId }: { projectId: string }) => {
                 return this.httpClient

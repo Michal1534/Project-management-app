@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { addUserAction } from '../store/add-new-user/add-new-user.action';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-add-user',
@@ -11,6 +12,8 @@ export class AddUserComponent {
     @Input() public visible: boolean;
 
     @Output() public closeEventChange = new EventEmitter<void>();
+
+    public projectId: string = '';
 
     public userForm = this.formBuilder.group({
         username: ['', [Validators.required, Validators.maxLength(50)]],
@@ -23,7 +26,11 @@ export class AddUserComponent {
         expirience: ['', [Validators.required, Validators.maxLength(50)]],
     });
 
-    constructor(private store: Store, private formBuilder: FormBuilder) {}
+    constructor(private store: Store, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute) {
+        this.activatedRoute.params.subscribe((params) => {
+            this.projectId = params['projectId'];
+        });
+    }
 
     public closeDialog(): void {
         this.userForm.reset({
@@ -53,6 +60,7 @@ export class AddUserComponent {
                     expirience: this.userForm.value.expirience!,
                     workload: 0,
                 },
+                projectId: this.projectId,
             })
         );
     }

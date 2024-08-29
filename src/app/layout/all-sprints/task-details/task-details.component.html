@@ -1,32 +1,158 @@
-<div class="flex flex-column gap-2">
+<div *ngIf="authenticatedUser$ | async as authenticatedUser" class="flex flex-column gap-2 overflow-auto h-full">
     <p-card *ngIf="task$ | async as task" header="Szczegóły zadania">
-        <p-fieldset>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="flex flex-column">
-                    <p>Nazwa:</p>
-                    <p>Typ zadania:</p>
-                    <p>Priorytet:</p>
-                    <p>Status:</p>
-                    <p>Przypisany użytkownik:</p>
-                    <p>Komponent:</p>
-                    <p>Punkty historii:</p>
-                    <p>Data utworzenia:</p>
-                    <p>Utworzony przez:</p>
-                    <p>Opis:</p>
+        <div *ngIf="!isEditMode" class="flex justify-content-end gap-2">
+            <p-button
+                *ngIf="authenticatedUser.role !== 'User'"
+                label="Edytuj"
+                (click)="toggleEditMode(task)"
+            ></p-button>
+            <p-button
+                *ngIf="authenticatedUser.role !== 'User'"
+                label="Usuń"
+                styleClass="p-button-danger"
+                (click)="deleteTask()"
+            >
+            </p-button>
+        </div>
+        <p-fieldset *ngIf="!isEditMode">
+            <div class="grid grid-cols-1 gap-3">
+                <div class="col-12 flex align-items-center">
+                    <span class="w-14rem">Nazwa:</span>
+                    <span>{{ task.name }}</span>
                 </div>
-                <div class="flex flex-column">
-                    <p>{{ task.name }}</p>
-                    <p>{{ task.task_type }}</p>
-                    <p>{{ task.priority }}</p>
-                    <p>{{ task.status }}</p>
-                    <p>{{ task.assigned_user.first_name }} {{ task.assigned_user.last_name }}</p>
-                    <p>{{ task.component }}</p>
-                    <p>{{ task.story_points }}</p>
-                    <p>{{ task.created_at | date : 'dd MM yyyy' }}</p>
-                    <p>{{ task.reported_by_user.first_name }} {{ task.reported_by_user.last_name }}</p>
-                    <p>{{ task.description }}</p>
+                <div class="col-12 flex align-items-center">
+                    <span class="w-14rem">Typ zadania:</span>
+                    <span>{{ task.task_type }}</span>
+                </div>
+                <div class="col-12 flex align-items-center">
+                    <span class="w-14rem">Priorytet:</span>
+                    <span>{{ task.priority }}</span>
+                </div>
+                <div class="col-12 flex align-items-center">
+                    <span class="w-14rem">Status:</span>
+                    <span>{{ task.status }}</span>
+                </div>
+                <div class="col-12 flex align-items-center">
+                    <span class="w-14rem">Przypisany użytkownik:</span>
+                    <span>{{ task?.assigned_user?.first_name }} {{ task?.assigned_user?.last_name }}</span>
+                </div>
+                <div class="col-12 flex align-items-center">
+                    <span class="w-14rem">Komponent:</span>
+                    <span>{{ task.component }}</span>
+                </div>
+                <div class="col-12 flex align-items-center">
+                    <span class="w-14rem">Punkty historii:</span>
+                    <span>{{ task.story_points }}</span>
+                </div>
+                <div class="col-12 flex align-items-center">
+                    <span class="w-14rem">Data utworzenia:</span>
+                    <span>{{ task.created_at | date : 'dd MM yyyy' }}</span>
+                </div>
+                <div class="col-12 flex align-items-center">
+                    <span class="w-14rem">Utworzony przez:</span>
+                    <span>{{ task?.reported_by_user.first_name }} {{ task?.reported_by_user.last_name }}</span>
+                </div>
+                <div class="col-12 flex align-items-center">
+                    <span class="h-full w-14rem">Opis:</span>
+                    <span class="w-9">{{ task.description }}</span>
                 </div>
             </div>
+        </p-fieldset>
+        <p-fieldset *ngIf="isEditMode">
+            <form [formGroup]="taskForm">
+                <div class="grid grid-cols-1">
+                    <div class="col-12 flex align-items-center">
+                        <span class="w-14rem">Nazwa:</span>
+                        <input class="w-25rem" type="text" formControlName="name" pInputText />
+                    </div>
+                    <div class="col-12 flex align-items-center">
+                        <span class="w-14rem">Typ zadania:</span>
+                        <p-dropdown
+                            styleClass="w-25rem"
+                            [options]="['Zadanie', 'Błąd', 'Usprawnienie']"
+                            formControlName="type"
+                            placeholder="Typ zadania"
+                        />
+                    </div>
+                    <div class="col-12 flex align-items-center">
+                        <span class="w-14rem">Priorytet:</span>
+                        <p-dropdown
+                            styleClass="w-25rem"
+                            [options]="['Niski', 'Średni', 'Wysoki']"
+                            formControlName="priority"
+                            placeholder="Priorytet"
+                        />
+                    </div>
+                    <div class="col-12 flex align-items-center">
+                        <span class="w-14rem">Status:</span>
+                        <p-dropdown
+                            styleClass="w-25rem"
+                            [options]="['Do zrobienia', 'W trakcie', 'Do sprawdzenia', 'Zrobione']"
+                            formControlName="status"
+                            placeholder="Status zadania"
+                        />
+                    </div>
+                    <div class="col-12 flex align-items-center">
+                        <span class="w-14rem">Przypisany użytkownik:</span>
+                        <p-dropdown
+                            styleClass="w-25rem"
+                            [options]="usersInProject"
+                            optionLabel="fullName"
+                            optionValue="id"
+                            formControlName="assigned_user_id"
+                            placeholder="Przypisany do (opcjonalne)"
+                        />
+                    </div>
+                    <div class="col-12 flex align-items-center">
+                        <span class="w-14rem">Komponent:</span>
+                        <p-dropdown
+                            styleClass="w-25rem"
+                            [options]="['Frontend', 'Backend', 'Baza danych', 'DevOps']"
+                            formControlName="component"
+                            placeholder="Komponent"
+                        />
+                    </div>
+                    <div class="col-12 flex align-items-center">
+                        <span class="w-14rem">Punkty historii:</span>
+                        <p-dropdown
+                            styleClass="w-25rem"
+                            [options]="[0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144]"
+                            formControlName="storyPoints"
+                            placeholder="Story points"
+                        />
+                    </div>
+                    <div class="col-12 flex align-items-center">
+                        <span class="w-14rem">Data utworzenia:</span>
+                        <p>{{ task.created_at | date : 'dd MM yyyy' }}</p>
+                    </div>
+                    <div class="col-12 flex align-items-center">
+                        <span class="w-14rem">Utworzony przez:</span>
+                        <p>{{ task.reported_by_user.first_name }} {{ task.reported_by_user.last_name }}</p>
+                    </div>
+                    <div class="col-12 flex align-items-center">
+                        <span class="h-full w-14rem">Opis:</span>
+                        <span class="p-float-label w-100">
+                            <textarea
+                                rows="5"
+                                cols="45"
+                                formControlName="description"
+                                placeholder="Opis zadania"
+                            ></textarea>
+                        </span>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <button type="button" pButton pRipple label="Anuluj" (click)="toggleEditMode(task)"></button>
+                    <button
+                        type="button"
+                        (click)="updateTask()"
+                        class="p-button-success"
+                        pButton
+                        pRipple
+                        label="Zapisz"
+                    ></button>
+                </div>
+            </form>
         </p-fieldset>
     </p-card>
 

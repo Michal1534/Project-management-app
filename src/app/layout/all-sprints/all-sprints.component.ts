@@ -12,6 +12,8 @@ import { SprintsResponse } from './store/fetch-all-sprints/fetch-all-sprints.res
 import { format } from 'date-fns';
 import { removeSprintAction } from './store/remove-sprint/remove-sprint.action';
 import { endSprintAction } from './store/end-sprint/end-sprint.action';
+import { selectAuthenticatedUser } from '../../store/selectors/authenticated-user.selector';
+import { removeTaskAction } from './store/remove-task/remove-task.action';
 
 @Component({
     selector: 'app-all-sprints',
@@ -27,6 +29,7 @@ export class AllSprintsComponent {
     public currentSprint?: SprintsResponse;
     public projectId: string;
     public sprintId: number;
+    public authenticatedUser$ = this.store.select(selectAuthenticatedUser);
 
     constructor(private store: Store, private route: ActivatedRoute, private actions$: Actions) {
         this.route.params.subscribe((params) => {
@@ -80,5 +83,9 @@ export class AllSprintsComponent {
                 },
             })
         );
+    }
+
+    public deleteTask(taskId: number): void {
+        this.store.dispatch(removeTaskAction({ taskId: taskId, projectId: Number(this.projectId) }));
     }
 }

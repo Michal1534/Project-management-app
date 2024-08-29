@@ -4,10 +4,10 @@
         <div *ngFor="let project of projects$ | async">
             <p-button
                 styleClass="w-25rem h-4rem"
-                [routerLink]="project.project.id.toString()"
+                [routerLink]="[project.id, 'current-sprint']"
                 [raised]="true"
                 size="large"
-                label="{{ project.project.name }}"
+                label="{{ project.name }}"
             >
             </p-button>
         </div>

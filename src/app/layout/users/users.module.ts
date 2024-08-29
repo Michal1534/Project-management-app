@@ -13,6 +13,8 @@ import { AddUserComponent } from './add-user/add-user.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { EditUserEffect } from './store/edit-user/edit-user.effect';
 import { RemoveUserEffect } from './store/remove-user/remove-user.effect';
+import { AssignUsersToProjectEffect } from './store/assign-users-to-project/assign-users-to-project.effect';
+import { FetchNoProjectUsersEffect } from './store/fetch-no-project-users/fetch-no-project-users.effect';
 
 @NgModule({
     declarations: [UsersComponent, AddUserComponent, EditUserComponent],
@@ -21,7 +23,14 @@ import { RemoveUserEffect } from './store/remove-user/remove-user.effect';
         UsersRoutingModule,
         SharedModule,
         StoreModule.forFeature(USERS_STATE_FEATURE_KEY, usersReducer),
-        EffectsModule.forFeature([FetchUsersEffect, AddUserEffect, EditUserEffect, RemoveUserEffect]),
+        EffectsModule.forFeature([
+            AssignUsersToProjectEffect,
+            FetchNoProjectUsersEffect,
+            FetchUsersEffect,
+            AddUserEffect,
+            EditUserEffect,
+            RemoveUserEffect,
+        ]),
     ],
 })
 export class UsersModule {}

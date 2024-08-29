@@ -28,7 +28,6 @@ export class FetchAllProjectsEffect {
             switchMap(() => {
                 return this.httpClient.get<ProjectsResponse[]>(`http://localhost:3000/api/project`).pipe(
                     map((projects: ProjectsResponse[]) => {
-                        console.log(projects);
                         return fetchAllProjectsSuccessAction({ projects });
                     }),
                     catchError((error: Error) => of(fetchAllProjectsErrorAction({ error })))

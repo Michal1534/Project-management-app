@@ -19,7 +19,6 @@ export class AddProjectComponent {
     constructor(private store: Store, private formBuilder: FormBuilder) {}
 
     public closeDialog(): void {
-        console.log('test123');
         this.projectForm.reset({
             name: '',
         });

@@ -1,0 +1,101 @@
+<div *ngIf="sprints$ | async as sprints" class="p-mb-3 flex justify-content-between">
+    <p-dropdown
+        [options]="sprints"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="Wybierz sprint"
+        styleClass="w-17rem"
+        [(ngModel)]="sprintId"
+        (onChange)="onSprintChange($event)"
+    >
+    </p-dropdown>
+    <ng-container *ngIf="authenticatedUser$ | async as authenticatedUser">
+        <button
+            *ngIf="authenticatedUser.role !== 'User'"
+            pButton
+            label="Automatycznie przypisz zadania"
+            icon="pi pi-plus"
+            iconPos="right"
+            [disabled]="!sprintId"
+            (click)="assignTasksAutomatically()"
+        ></button>
+    </ng-container>
+    <button
+        pButton
+        label="Wyświetl szczegóły sprintu"
+        icon="pi pi-plus"
+        iconPos="right"
+        [disabled]="!sprintId"
+        (click)="setDetailsDialogVisible(true)"
+    ></button>
+</div>
+
+<div *ngIf="currentSprint$ | async as currentSprint" class="mt-2 p-grid h-full overflow-auto">
+    <div class="p-col-3" *ngFor="let status of statuses">
+        <div class="column-header sticky top-0">{{ status.label }}</div>
+        <div class="column-content" pDroppable="true" (onDrop)="onDrop($event, status.value)">
+            <div
+                class="task-card"
+                *ngFor="let task of getTasksByStatus(status.value)"
+                pDraggable="true"
+                (onDragStart)="dragStart(task)"
+                (onDragEnd)="dragEnd()"
+            >
+                <p-card *ngIf="sprintId">
+                    <ng-template pTemplate="header">
+                        <a class="pt-2 text-xl flex justify-content-center" [routerLink]="[task.id]">{{ task.name }}</a>
+                    </ng-template>
+
+                    <p>
+                        <strong>Przypisany do:</strong>
+                        <ng-container *ngIf="!task.assigned_user; else assignedUser">
+                            <p-dropdown
+                                [options]="usersInProject"
+                                optionLabel="fullName"
+                                optionValue="id"
+                                (onChange)="onAssignUser(task, $event.value)"
+                                placeholder="Przypisany do (opcjonalne)"
+                            ></p-dropdown>
+                        </ng-container>
+                        <ng-template #assignedUser>
+                            <ng-container *ngIf="editingTaskId !== task.id">
+                                <span (click)="startEditing(task.id)">
+                                    {{ task.assigned_user.first_name }} {{ task.assigned_user.last_name }}
+                                </span>
+                            </ng-container>
+                            <ng-container *ngIf="editingTaskId === task.id">
+                                <p-dropdown
+                                    [autofocus]="true"
+                                    [options]="usersInProject"
+                                    optionLabel="fullName"
+                                    optionValue="id"
+                                    [(ngModel)]="task.assigned_user.id"
+                                    placeholder="Przypisany do"
+                                    (onBlur)="stopEditing()"
+                                    (onChange)="onAssignUser(task, $event.value); stopEditing()"
+                                    [tabindex]="0"
+                                ></p-dropdown>
+                            </ng-container>
+                        </ng-template>
+                    </p>
+                    <p><strong>Opis:</strong> {{ task.description }}</p>
+
+                    <div class="flex justify-content-between">
+                        <div class="flex gap-2">
+                            <p-chip [label]="task.component"></p-chip>
+                            <p-chip [label]="task.priority"></p-chip>
+                            <p-chip [label]="task.task_type"></p-chip>
+                        </div>
+                        <p-badge [value]="task.story_points.toString()" />
+                    </div>
+                </p-card>
+            </div>
+        </div>
+    </div>
+    <app-sprint-details
+        *ngIf="visible"
+        [visible]="visible"
+        (closeEventChange)="setDetailsDialogVisible(false)"
+        [sprint]="currentSprint.sprint"
+    ></app-sprint-details>
+</div>

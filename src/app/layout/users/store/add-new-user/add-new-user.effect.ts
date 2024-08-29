@@ -12,10 +12,9 @@ export class AddUserEffect {
     public addUser$ = createEffect(() =>
         this.actions$.pipe(
             ofType(addUserAction),
-            switchMap(({ user }: { user: AddUser }) => {
-                console.log({ ...user });
+            switchMap(({ projectId, user }: { projectId: string; user: AddUser }) => {
                 return this.httpClient.post('http://localhost:3000/api/auth/signup', { ...user }).pipe(
-                    map(() => addUserSuccessAction()),
+                    map(() => addUserSuccessAction({ projectId })),
                     catchError((error: Error) => of(addUserErrorAction({ error })))
                 );
             })

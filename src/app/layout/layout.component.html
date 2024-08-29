@@ -1,5 +1,15 @@
 <header>
     <div class="h-full flex flex-row align-items-center">
+        <p-dropdown
+            *ngIf="projects$ | async as projects"
+            [options]="projects"
+            optionLabel="name"
+            optionValue="id"
+            [(ngModel)]="selectedProjectId"
+            (onChange)="onProjectChange($event.value)"
+            placeholder="Wybierz projekt"
+        ></p-dropdown>
+
         <div class="header w-full flex justify-content-center text-3xl">Zarządzanie projektami</div>
         <div class="flex justify-content-end">
             <p-button
@@ -18,9 +28,13 @@
 </header>
 
 <aside>
-    <p-menu styleClass="h-full" [model]="itemsOwner"></p-menu>
+    <p-menu
+        *ngIf="authenticatedUser$ | async as authenticatedUser"
+        styleClass="h-full"
+        [model]="authenticatedUser.role === 'Admin' ? itemsOwner : itemsWorker"
+    ></p-menu>
 </aside>
 
-<main>
+<main class="overflow-hidden">
     <router-outlet></router-outlet>
 </main>

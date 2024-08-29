@@ -1,0 +1,28 @@
+.p-grid {
+  display: flex;
+  justify-content: space-between;
+  overflow: auto;
+}
+.column-header {
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 1em;
+  text-align: center;
+  background: #f0f0f0;
+  border-bottom: 2px solid #ccc;
+}
+.column-content {
+  padding: 1em;
+  background: #f4f4f4;
+  min-height: 500px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex-grow: 1;
+  margin: 0 0.5em;
+}
+.task-card {
+  margin-bottom: 1em;
+}
+.p-col-3 {
+  flex: 1;
+}

@@ -37,17 +37,14 @@ export class ProjectDetailsComponent {
     constructor(private formBuilder: FormBuilder, private store: Store, private activatedRoute: ActivatedRoute) {
         this.activatedRoute.params.subscribe((params) => {
             this.projectId = params['projectDetailsId'];
-            console.log(this.projectId);
             this.store.dispatch(fetchProjectUsersAction({ projectId: this.projectId }));
             this.store.dispatch(fetchNoProjectUsersAction({ projectId: this.projectId }));
         });
 
-        console.log(this.projectUsers$);
     }
 
     ngOnInit() {
         this.usersNotInProject$.subscribe((users) => {
-            console.log(users);
             this.usersNotInProject = users.map((user) => ({
                 ...user,
                 fullName: `${user.first_name} ${user.last_name}`,
@@ -71,7 +68,6 @@ export class ProjectDetailsComponent {
     }
 
     public removeUserFromProject(userId: number) {
-        console.log(userId);
         this.store.dispatch(removeUserFromProjectAction({ projectId: Number(this.projectId), userId }));
     }
 

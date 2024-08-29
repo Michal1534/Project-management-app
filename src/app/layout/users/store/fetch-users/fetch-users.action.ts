@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { UsersResponse } from './fetch-users.response';
 
-export const fetchUsersAction = createAction('[Users] Fetch Users Action');
+export const fetchUsersAction = createAction('[Users] Fetch Users Action', props<{ projectId: string }>());
 
 export const fetchUsersSuccessAction = createAction(
     '[Users] Fetch Users Success Action',

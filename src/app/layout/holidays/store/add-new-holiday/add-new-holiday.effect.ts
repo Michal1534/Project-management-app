@@ -22,7 +22,10 @@ export class AddHolidayEffect {
                     holiday: { userId: number; startDate: Date; endDate: Date; reason: string };
                 }) => {
                     return this.httpClient
-                        .post('http://localhost:3000/api/vacation/create-vacation', { ...holiday })
+                        .post('http://localhost:3000/api/vacation/create-vacation', {
+                            ...holiday,
+                            projectId: Number(projectId),
+                        })
                         .pipe(
                             map(() => addHolidaySuccessAction({ projectId })),
                             catchError((error: Error) => of(addHolidayErrorAction({ error })))

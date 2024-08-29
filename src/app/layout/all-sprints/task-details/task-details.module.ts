@@ -11,6 +11,8 @@ import { TASK_STATE_FEATURE_KEY } from './store/task-state.selector';
 import { FetchCommentsEffect } from './store/fetch-comments/fetch-comments.effect';
 import { AddCommentEffect } from './store/add-comment/add-comment.effect';
 import { RemoveCommentEffect } from './store/remove-comment/remove-comment.effect';
+import { UpdateTaskEffect } from './store/update-task/update-task.effect';
+import { FetchProjectUsersEffect } from './store/fetch-project-users/fetch-project-users.effect';
 
 @NgModule({
     declarations: [TaskDetailsComponent],
@@ -19,7 +21,14 @@ import { RemoveCommentEffect } from './store/remove-comment/remove-comment.effec
         SharedModule,
         TaskDetailsRoutingModule,
         StoreModule.forFeature(TASK_STATE_FEATURE_KEY, taskReducer),
-        EffectsModule.forFeature([FetchTaskEffect, FetchCommentsEffect, AddCommentEffect, RemoveCommentEffect]),
+        EffectsModule.forFeature([
+            UpdateTaskEffect,
+            FetchTaskEffect,
+            FetchCommentsEffect,
+            AddCommentEffect,
+            FetchProjectUsersEffect,
+            RemoveCommentEffect,
+        ]),
     ],
 })
 export class TaskDetailsModule {}

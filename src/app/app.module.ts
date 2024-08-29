@@ -10,12 +10,14 @@ import { authenticatedUserReducer } from './store/authenticated-user.reducer';
 import { FetchAuthenticatedUserEffect } from './store/queries/fetch-authenticated-user/fetch-authenticated-user.effect';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from '../shared/shared.module';
+import { DragDropModule } from 'primeng/dragdrop';
 
 @NgModule({
     declarations: [AppComponent],
     imports: [
         AppRoutingModule,
         BrowserModule,
+        DragDropModule,
         SharedModule,
         HttpClientModule,
         CoreModule.forRoot(),
