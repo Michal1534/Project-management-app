@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { fetchAuthenticatedUserTokenAction } from '../store/queries/fetch-user-token/fetch-user-token.action';
@@ -6,7 +6,6 @@ import { fetchAuthenticatedUserTokenAction } from '../store/queries/fetch-user-t
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
-    // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
     public loginForm = this.formBuilder.group({
@@ -17,7 +16,6 @@ export class LoginComponent {
     constructor(private store: Store, private formBuilder: FormBuilder) {}
 
     public onLogInClick() {
-        //TODO
         this.store.dispatch(
             fetchAuthenticatedUserTokenAction({
                 user: {

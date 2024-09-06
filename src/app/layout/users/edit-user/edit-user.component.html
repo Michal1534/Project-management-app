@@ -1,20 +1,20 @@
 <p-dialog [(visible)]="editDialogVisble" [draggable]="false" [resizable]="false" (onHide)="closeDialog()">
     <ng-template pTemplate="header">
-        <h3>Dodaj nowego użytkownika</h3>
+        <h3>Edytuj użytkownika</h3>
     </ng-template>
     <ng-template pTemplate="content">
         <form [formGroup]="userForm">
             <div class="mb-6 mt-2">
                 <span class="p-float-label">
                     <input class="p-3 w-25rem" type="text" formControlName="firstName" pInputText />
-                    <label>First Name</label>
+                    <label>Imię</label>
                 </span>
             </div>
 
             <div class="mb-6">
                 <span class="p-float-label">
                     <input class="p-3 w-25rem" type="text" formControlName="lastName" pInputText />
-                    <label>Last Name</label>
+                    <label>Nazwisko</label>
                 </span>
             </div>
 
@@ -34,12 +34,12 @@
             <div class="mb-6">
                 <span class="p-float-label">
                     <p-dropdown
-                        formControlName="position"
+                        formControlName="specialization"
                         [options]="['Frontend', 'Backend', 'Baza danych', 'DevOps']"
                         placeholder="Wybierz rolę"
                         styleClass="w-25rem"
                     />
-                    <label>Position</label>
+                    <label>Specjalizacja</label>
                 </span>
             </div>
 

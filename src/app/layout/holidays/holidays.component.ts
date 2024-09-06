@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
 import { CalendarOptions } from '@fullcalendar/core';
@@ -10,7 +10,7 @@ import { selectAuthenticatedUser } from '../../store/selectors/authenticated-use
 import { addHolidayAction, addHolidaySuccessAction } from './store/add-new-holiday/add-new-holiday.action';
 import { fetchAllHolidaysAction } from './store/fetch-all-holidays/fetch-all-holidays.action';
 import { Actions, ofType } from '@ngrx/effects';
-import { filter, map, tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 import { selectAllHolidays } from './store/selectors/all-holidays.selector';
 import { pl } from 'date-fns/locale';
 import { removeHolidayAction, removeHolidaySuccessAction } from './store/remove-holiday/remove-holiday.action';
@@ -35,7 +35,6 @@ export class HolidaysComponent {
         },
         selectable: true,
         selectMirror: true,
-        allDaySlot: false,
         dayHeaderFormat: { weekday: 'long' },
         displayEventTime: true,
         displayEventEnd: true,
@@ -126,7 +125,6 @@ export class HolidaysComponent {
                 tap(() => (this.isDetailsVisible = false))
             )
             .subscribe();
-
     }
 
     public addHoliday(): void {

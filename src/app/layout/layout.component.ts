@@ -26,8 +26,6 @@ export class LayoutComponent implements OnInit {
         });
         this.store.dispatch(fetchAuthenticatedUserAction());
         this.store.dispatch(fetchProjectsAction());
-
-        this.authenticatedUser$.subscribe((user) => console.log(user));
     }
 
     ngOnInit(): void {
@@ -62,19 +60,14 @@ export class LayoutComponent implements OnInit {
     }
 
     public onProjectChange(projectId: string): void {
-        // Pobierz aktualną ścieżkę URL
         const currentPath = this.router.url;
 
-        // Podziel ścieżkę na segmenty
         const pathSegments = currentPath.split('/');
 
-        // Zaktualizuj segment `projectId`
         pathSegments[2] = projectId;
 
-        // Złóż ścieżkę z powrotem
         const newPath = pathSegments.join('/');
 
-        // Przekieruj użytkownika na nową ścieżkę i przeładuj widok
         this.router.navigate([newPath], { queryParamsHandling: 'preserve', onSameUrlNavigation: 'reload' });
     }
 }

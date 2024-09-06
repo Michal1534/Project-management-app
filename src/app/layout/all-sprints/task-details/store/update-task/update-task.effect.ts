@@ -9,7 +9,7 @@ import { UpdateTaskAction, UpdateTaskErrorAction, UpdateTaskSuccessAction } from
 export class UpdateTaskEffect {
     constructor(private actions$: Actions, private httpClient: HttpClient, private store: Store) {}
 
-    public fetchAllProjects$ = createEffect(() =>
+    public updateTask$ = createEffect(() =>
         this.actions$.pipe(
             ofType(UpdateTaskAction),
             switchMap(({ taskId, task }: { task: any; taskId: string }) => {

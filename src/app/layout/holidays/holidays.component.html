@@ -2,9 +2,6 @@
     <full-calendar *ngIf="allHoliday$ | async" [options]="calendarOptions" [events]="allHoliday$ | async">
     </full-calendar>
 </div>
-<!-- <ng-template #emptyCallendar>
-    <full-calendar [options]="calendarOptions"></full-calendar>
-</ng-template> -->
 
 <p-dialog
     contentStyleClass="w-30rem overflow-hidden"
@@ -81,9 +78,3 @@
         </div>
     </ng-template>
 </p-dialog>
-
-<!-- <p-dialog [draggable]="false" [resizable]="false" header="Szczegóły urlopu" [(visible)]="isDetailsVisible">
-    <div class="mb-2"><span class="font-semibold">Imię i nazwisko klienta:</span> {{ currentEvent.title }}</div>
-    <div class="mb-2"><span class="font-semibold">Adres klienta:</span> {{ currentEvent.start }}</div>
-    <div class="mb-2"><span class="font-semibold">Dane odnośnie zlecenia:</span> {{ currentEvent.end }}</div>
-</p-dialog> -->

@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Store, select } from '@ngrx/store';
+import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { selectUsers, selectUsersNotInProject } from './store/selectors/users.selector';
 import { fetchUsersAction } from './store/fetch-users/fetch-users.action';
 import { FormBuilder, Validators } from '@angular/forms';
-import { first, tap } from 'rxjs';
-import { addUserAction, addUserSuccessAction } from './store/add-new-user/add-new-user.action';
+import { tap } from 'rxjs';
+import { addUserSuccessAction } from './store/add-new-user/add-new-user.action';
 import { Actions, ofType } from '@ngrx/effects';
 import { editUserSuccessAction } from './store/edit-user/edit-user.action';
 import { Users } from '../all-projects/project-details/store/fetch-project-users/fetch-project-users.response';
@@ -18,7 +18,6 @@ import { assignUsersToProjectAction } from './store/assign-users-to-project/assi
     selector: 'app-users',
     templateUrl: './users.component.html',
     styleUrl: './users.component.scss',
-    // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UsersComponent {
     public users$ = this.store.select(selectUsers);
@@ -49,7 +48,6 @@ export class UsersComponent {
             this.store.dispatch(fetchUsersAction({ projectId: this.projectId }));
             this.store.dispatch(fetchNoProjectUsersAction({ projectId: this.projectId }));
         });
-        // this.store.dispatch(fetchUsersAction());
 
         this.actions$
             .pipe(

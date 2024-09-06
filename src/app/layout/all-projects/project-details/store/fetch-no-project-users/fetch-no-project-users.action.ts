@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ProjectUsers, Users } from './fetch-project-users.response';
+import { Users } from './fetch-project-users.response';
 
 export const fetchNoProjectUsersAction = createAction(
     '[Projects] Fetch No Project Users Action',

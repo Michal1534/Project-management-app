@@ -4,7 +4,7 @@ export interface EditUser {
     firstName: string;
     lastName: string;
     role: string;
-    position: string;
+    specialization: string;
     expirience: string;
     workload: number;
 }

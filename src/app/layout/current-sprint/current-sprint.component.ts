@@ -1,12 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Inject } from '@angular/core';
-import { MockTaskService } from './mock-task.service';
+import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { fetchCurrentSprintAction } from './store/fetch-current-sprint/fetch-current-sprint.action';
 import { selectCurrentSprintState } from './store/current-sprint-state.selector';
 import { combineLatest, map, max, tap } from 'rxjs';
 import { UpdateTaskAction } from './store/update-task-status/update-task.action';
-import { selectAllSprints } from '../all-sprints/store/selectors/all-sprints.selector';
 import { ActivatedRoute } from '@angular/router';
 import { fetchAllSprintsAction } from '../all-sprints/store/fetch-all-sprints/fetch-all-sprints.action';
 import { selectCurrentAllSprints } from './store/selectors/all-sprints.selector';
@@ -16,12 +13,12 @@ import { Users } from './store/fetch-project-users/fetch-project-users.response'
 import { fetchAllHolidaysAction } from './store/fetch-all-holidays/fetch-all-holidays.action';
 import { selectAllHolidays } from './store/selectors/all-holidays.selector';
 import { selectAuthenticatedUser } from '../../store/selectors/authenticated-user.selector';
+import { differenceInDays } from 'date-fns';
 
 @Component({
     selector: 'app-current-sprint',
     templateUrl: './current-sprint.component.html',
     styleUrls: ['./current-sprint.component.scss'],
-    providers: [{ provide: MockTaskService }],
 })
 export class CurrentSprintComponent {
     tasks: any[] = [];
@@ -37,7 +34,6 @@ export class CurrentSprintComponent {
         map((sprints) => sprints.filter((sprint) => sprint.status === 'STARTED')),
         tap((sprints) => {
             if (sprints.length > 0) {
-                // this.sprintId = String(sprints[0].id);
                 this.sprintStartDate = new Date(sprints[0].start_date);
                 this.sprintEndDate = new Date(sprints[0].end_date);
             } else {
@@ -60,9 +56,14 @@ export class CurrentSprintComponent {
 
     public availableUsers$ = combineLatest([this.users$, this.holidays$]).pipe(
         map(([users, holidays]) => {
-            return users.filter((user) => {
+            const filteredUsers = users.filter((user) => user.role === 'User');
+            return filteredUsers.map((user) => {
                 const userHolidays = holidays.filter((holiday) => holiday.user_id === user.id);
-                return !userHolidays.some((holiday) => this.isOnHolidayDuringSprint(holiday));
+                const totalHolidayDays = userHolidays.reduce(
+                    (acc, holiday) => acc + this.getHolidayDaysDuringSprint(holiday),
+                    0
+                );
+                return { ...user, totalHolidayDays };
             });
         })
     );
@@ -92,12 +93,6 @@ export class CurrentSprintComponent {
                 fullName: `${user.first_name} ${user.last_name}`,
             }));
         });
-    }
-
-    private isOnHolidayDuringSprint(holiday: any): boolean {
-        if (!this.sprintStartDate || !this.sprintEndDate) return false;
-
-        return new Date(holiday.start_date) <= this.sprintEndDate && new Date(holiday.end_date) >= this.sprintStartDate;
     }
 
     public setDetailsDialogVisible(isVisible: boolean): void {
@@ -156,8 +151,8 @@ export class CurrentSprintComponent {
         }
 
         this.availableUsers$.subscribe((users) => {
-            const sortedUsers = users.sort((a: any, b: any) => this.compareExperience(a.expirience, b.expirience));
-            console.log(this.tasks);
+            const sortedUsers = users.sort((a, b) => this.compareExperience(a.expirience, b.expirience));
+
             const maxStoryPoints: { [key: string]: number } = {
                 Senior: 13,
                 Mid: 8,
@@ -165,29 +160,22 @@ export class CurrentSprintComponent {
             };
 
             const userTaskAssignments: { [key: number]: number } = {};
-            console.log(maxStoryPoints);
 
-            // Sortowanie zadań według priorytetu
             const filteredAndSortedTasks = this.tasks
-                .filter((task) => !task.assigned_user_id) // Filtruj tylko zadania nieprzypisane
+                .filter((task) => !task.assigned_user_id)
                 .sort((a, b) => this.comparePriority(a, b));
 
-            console.log(filteredAndSortedTasks);
             filteredAndSortedTasks.forEach((task) => {
                 let assigned = false;
 
-                // Próbuj przypisać użytkowników specjalizujących się w odpowiednich komponentach
-                sortedUsers.some((user: Users) => {
-                    console.log(user);
+                sortedUsers.some((user) => {
                     const currentSP = userTaskAssignments[user.id] || 0;
-                    const userMaxSP = maxStoryPoints[user.position];
+                    const userMaxSP = maxStoryPoints[user.specialization];
+                    const adjustedMaxSP =
+                        userMaxSP - user.totalHolidayDays * (userMaxSP / (Object.keys(maxStoryPoints).length * 7));
 
-                    if (
-                        currentSP + task.story_points <= userMaxSP ||
-                        this.areTasksRemaining(userTaskAssignments, maxStoryPoints)
-                    ) {
-                        console.log('test123');
-                        if (!task.assigned_user_id && task.component === user.position) {
+                    if (currentSP + task.story_points <= adjustedMaxSP || this.areTasksRemaining()) {
+                        if (!task.assigned_user_id && task.component === user.specialization) {
                             this.store.dispatch(
                                 UpdateTaskAction({
                                     projectId: this.projectId,
@@ -199,21 +187,18 @@ export class CurrentSprintComponent {
 
                             userTaskAssignments[user.id] = currentSP + task.story_points;
                             assigned = true;
-                            return true; // Przerwanie iteracji po przypisaniu zadania
+                            return true;
                         }
                     }
                     return false;
                 });
 
-                // Jeśli nie znaleziono odpowiedniego użytkownika, przypisz do użytkownika z najmniejszym obciążeniem SP
                 if (!assigned) {
-                    const leastLoadedUser = sortedUsers.reduce((prev: Users, curr: Users) => {
+                    const leastLoadedUser = sortedUsers.reduce((prev, curr) => {
                         const prevSP = userTaskAssignments[prev.id] || 0;
                         const currSP = userTaskAssignments[curr.id] || 0;
                         return prevSP < currSP ? prev : curr;
                     });
-
-                    console.log(leastLoadedUser);
 
                     this.store.dispatch(
                         UpdateTaskAction({
@@ -236,8 +221,8 @@ export class CurrentSprintComponent {
         return experienceLevels[exp2] - experienceLevels[exp1];
     }
 
-    private comparePriority(a: any, b: any): number {
-        console.log(a, b);
+    //@ts-ignore
+    private comparePriority(a, b): number {
         const priorityLevels: { [key: string]: number } = { Wysoki: 1, Średni: 2, Niski: 3 };
         const priorityComparison = priorityLevels[a.priority] - priorityLevels[b.priority];
 
@@ -245,15 +230,26 @@ export class CurrentSprintComponent {
             return priorityComparison;
         }
 
-        // Jeśli priorytety są takie same, sortuj według daty utworzenia (lub innej właściwości)
         return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
     }
 
-    private areTasksRemaining(
-        userTaskAssignments: { [key: number]: number },
-        maxStoryPoints: { [key: string]: number }
-    ): boolean {
-        // Sprawdzenie, czy jakieś zadania pozostały do przypisania
+    private areTasksRemaining(): boolean {
         return this.tasks.some((task) => !task.assigned_user_id);
+    }
+
+    private getHolidayDaysDuringSprint(holiday: any): number {
+        if (!this.sprintStartDate || !this.sprintEndDate) return 0;
+
+        const holidayStart = new Date(holiday.start_date);
+        const holidayEnd = new Date(holiday.end_date);
+        const sprintStart = new Date(this.sprintStartDate);
+        const sprintEnd = new Date(this.sprintEndDate);
+
+        const actualHolidayStart = holidayStart < sprintStart ? sprintStart : holidayStart;
+        const actualHolidayEnd = holidayEnd > sprintEnd ? sprintEnd : holidayEnd;
+
+        const diffDays = differenceInDays(actualHolidayEnd, actualHolidayStart) + 1;
+
+        return diffDays;
     }
 }

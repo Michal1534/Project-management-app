@@ -12,13 +12,11 @@
                 <label for="endDate">Data zakończenia : {{ sprint.end_date | date : 'dd/MM/yyyy' }}</label>
             </div>
 
-            <!-- Total Story Points -->
             <div class="field">
                 <label for="totalStoryPoints">Liczba wszystkich story pointów: {{ totalStoryPoints }}</label>
             </div>
 
-            <!-- User List with Assigned Story Points -->
-            <label class="font-bold">Lista użytkowników i ich punkty historii:</label>
+            <label class="font-bold">Lista użytkowników i ich story pointy:</label>
             <div class="field" *ngFor="let user of usersWithStoryPoints">
                 <div class="p-grid grid-nogutter flex mt-3">
                     <div class="col-9">

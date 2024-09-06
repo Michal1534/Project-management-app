@@ -20,8 +20,8 @@ export class FetchUserProjectsEffect {
                     switchMap((authenticatedUser: AuthenticatedUserResponse) => {
                         const endpoint =
                             authenticatedUser.role === 'Admin'
-                                ? `http://localhost:3000/api/project` // Admins get all projects
-                                : `http://localhost:3000/api/user-projects/projects/${authenticatedUser.id}`; // Non-admins get their projects only
+                                ? `http://localhost:3000/api/project`
+                                : `http://localhost:3000/api/user-projects/projects/${authenticatedUser.id}`;
                         return this.httpClient.get<UserProjectsResponse[]>(endpoint).pipe(
                             map((userProjects: UserProjectsResponse[]) =>
                                 fetchProjectsSuccessAction({ projects: userProjects })

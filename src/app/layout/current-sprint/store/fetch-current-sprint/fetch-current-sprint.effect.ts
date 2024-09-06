@@ -15,7 +15,7 @@ import { UpdateTaskSuccessAction } from '../update-task-status/update-task.actio
 export class FetchCurrentSprintEffect {
     constructor(private actions$: Actions, private httpClient: HttpClient, private store: Store) {}
 
-    public fetchAllProjects$ = createEffect(() =>
+    public fetchCurrentSprint$ = createEffect(() =>
         this.actions$.pipe(
             ofType(fetchCurrentSprintAction, UpdateTaskSuccessAction),
             switchMap(({ projectId, sprintId }: { projectId: string; sprintId: string }) => {

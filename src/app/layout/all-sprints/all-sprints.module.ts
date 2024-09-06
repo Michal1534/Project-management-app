@@ -16,7 +16,7 @@ import { RemoveSprintEffect } from './store/remove-sprint/remove-sprint.effect';
 import { EndSprintEffect } from './store/end-sprint/end-sprint.effect';
 import { AddTaskComponent } from './add-task/add-task.component';
 import { FetchProjectUsersEffect } from './store/fetch-project-users/fetch-project-users.effect';
-import { AddTaskEffect } from './store/add-task/add-new-sprint.effect';
+import { AddTaskEffect } from './store/add-task/add-new-task.effect';
 import { RemoveTaskEffect } from './store/remove-task/remove-task.effect';
 
 @NgModule({

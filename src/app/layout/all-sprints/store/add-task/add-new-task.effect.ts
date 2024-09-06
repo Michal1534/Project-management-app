@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { switchMap, map, catchError, of } from 'rxjs';
-import { addTaskAction, addTaskErrorAction, addTaskSuccessAction } from './add-new-sprint.action';
+import { addTaskAction, addTaskErrorAction, addTaskSuccessAction } from './add-new-task.action';
 
 @Injectable()
 export class AddTaskEffect {

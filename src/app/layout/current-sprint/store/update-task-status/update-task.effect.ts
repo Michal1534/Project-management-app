@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { switchMap, map, catchError, of } from 'rxjs';
+import { switchMap, map, catchError, of, mergeMap } from 'rxjs';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { UpdateTaskAction, UpdateTaskErrorAction, UpdateTaskSuccessAction } from './update-task.action';
@@ -9,10 +9,10 @@ import { UpdateTaskAction, UpdateTaskErrorAction, UpdateTaskSuccessAction } from
 export class UpdateTaskEffect {
     constructor(private actions$: Actions, private httpClient: HttpClient, private store: Store) {}
 
-    public fetchAllProjects$ = createEffect(() =>
+    public updateTaskEffect$ = createEffect(() =>
         this.actions$.pipe(
             ofType(UpdateTaskAction),
-            switchMap(
+            mergeMap(
                 ({
                     projectId,
                     sprintId,

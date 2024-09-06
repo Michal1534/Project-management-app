@@ -13,14 +13,14 @@ import { addSprintSuccessAction } from '../add-new-sprint/add-new-sprint.action'
 import { startSprintSuccessAction } from '../start-sprint/start-sprint.action';
 import { removeSprintSuccessAction } from '../remove-sprint/remove-sprint.action';
 import { endSprintSuccessAction } from '../end-sprint/end-sprint.action';
-import { addTaskSuccessAction } from '../add-task/add-new-sprint.action';
+import { addTaskSuccessAction } from '../add-task/add-new-task.action';
 import { removeTaskSuccessAction } from '../remove-task/remove-task.action';
 
 @Injectable()
 export class FetchAllSprintsEffect {
     constructor(private actions$: Actions, private httpClient: HttpClient, private store: Store) {}
 
-    public fetchAllProjects$ = createEffect(() =>
+    public fetchAllSprints$ = createEffect(() =>
         this.actions$.pipe(
             ofType(
                 fetchAllSprintsAction,

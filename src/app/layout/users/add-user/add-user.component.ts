@@ -22,7 +22,7 @@ export class AddUserComponent {
         firstName: ['', [Validators.required, Validators.maxLength(50)]],
         lastName: ['', [Validators.required, Validators.maxLength(50)]],
         role: ['', [Validators.required, Validators.maxLength(50)]],
-        position: ['', [Validators.required, Validators.maxLength(50)]],
+        specialization: ['', [Validators.required, Validators.maxLength(50)]],
         expirience: ['', [Validators.required, Validators.maxLength(50)]],
     });
 
@@ -38,7 +38,7 @@ export class AddUserComponent {
             firstName: '',
             lastName: '',
             password: '',
-            position: '',
+            specialization: '',
             role: '',
             expirience: '',
             username: '',
@@ -56,7 +56,7 @@ export class AddUserComponent {
                     firstName: this.userForm.value.firstName!,
                     lastName: this.userForm.value.lastName!,
                     role: this.userForm.value.role!,
-                    position: this.userForm.value.position!,
+                    specialization: this.userForm.value.specialization!,
                     expirience: this.userForm.value.expirience!,
                     workload: 0,
                 },

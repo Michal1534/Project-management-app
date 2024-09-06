@@ -2,12 +2,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { addSprintAction } from '../store/add-new-sprint/add-new-sprint.action';
 import { fetchProjectUsersAction } from '../store/fetch-project-users/fetch-project-users.action';
 import { selectProjectUsers } from '../store/selectors/project-users.selector';
 import { Users } from '../store/fetch-project-users/fetch-project-users.response';
 import { selectAuthenticatedUser } from '../../../store/selectors/authenticated-user.selector';
-import { addTaskAction } from '../store/add-task/add-new-sprint.action';
+import { addTaskAction } from '../store/add-task/add-new-task.action';
 
 @Component({
     selector: 'app-add-task',

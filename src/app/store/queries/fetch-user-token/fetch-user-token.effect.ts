@@ -29,7 +29,6 @@ export class FetchAuthenticatedUserTokenEffect {
                 if (localStorage.getItem('token')) {
                     localStorage.removeItem('token');
                 }
-                //TODO
                 return this.httpClient
                     .post<FetchUserTokenResponse>('http://localhost:3000/api/auth/login', {
                         username: user.email,

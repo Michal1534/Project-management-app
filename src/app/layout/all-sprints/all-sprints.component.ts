@@ -1,15 +1,13 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { fetchAllSprintsAction } from './store/fetch-all-sprints/fetch-all-sprints.action';
 import { selectAllSprints } from './store/selectors/all-sprints.selector';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
 import { Actions, ofType } from '@ngrx/effects';
-import { add } from 'date-fns';
 import { addSprintSuccessAction } from './store/add-new-sprint/add-new-sprint.action';
 import { tap } from 'rxjs';
 import { startSprintSuccessAction } from './store/start-sprint/start-sprint.action';
 import { SprintsResponse } from './store/fetch-all-sprints/fetch-all-sprints.response';
-import { format } from 'date-fns';
 import { removeSprintAction } from './store/remove-sprint/remove-sprint.action';
 import { endSprintAction } from './store/end-sprint/end-sprint.action';
 import { selectAuthenticatedUser } from '../../store/selectors/authenticated-user.selector';
@@ -19,7 +17,6 @@ import { removeTaskAction } from './store/remove-task/remove-task.action';
     selector: 'app-all-sprints',
     templateUrl: './all-sprints.component.html',
     styleUrl: './all-sprints.component.scss',
-    // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AllSprintsComponent {
     public sprints$ = this.store.select(selectAllSprints);

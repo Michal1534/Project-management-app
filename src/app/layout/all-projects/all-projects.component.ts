@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { fetchAllProjectsAction } from './store/fetch-all-projects/fetch-all-projects.action';
 import { selectAllProjects } from './store/selectors/all-projects.selector';
-import { FormBuilder, Validators } from '@angular/forms';
-import { addProjectAction, addProjectSuccessAction } from './store/add-new-project/add-new-project.action';
+import { addProjectSuccessAction } from './store/add-new-project/add-new-project.action';
 import { Actions, ofType } from '@ngrx/effects';
 import { tap } from 'rxjs';
 import { removeProjectAction } from './store/remove-project/remove-project.action';
@@ -14,7 +13,6 @@ import { editProjectSuccessAction } from './store/edit-project/edit-project.acti
     selector: 'app-all-projects',
     templateUrl: './all-projects.component.html',
     styleUrl: './all-projects.component.scss',
-    // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AllProjectsComponent {
     public projects$ = this.store.select(selectAllProjects);

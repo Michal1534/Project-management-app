@@ -3,8 +3,6 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { switchMap, map, catchError, of } from 'rxjs';
 import { addHolidayAction, addHolidayErrorAction, addHolidaySuccessAction } from './add-new-holiday.action';
-import { Store } from '@ngrx/store';
-import { ActivatedRoute } from '@angular/router';
 
 @Injectable()
 export class AddHolidayEffect {
